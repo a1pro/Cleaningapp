@@ -18,8 +18,9 @@ const styles = StyleSheet.create({
     lineHeight: 35,
   },
   h3: {
-    fontSize: 28,
-    fontWeight: '500',
+    fontSize: 26,
+    fontWeight: '400',
+    color:'#000'
   },
   h4: {
     fontSize: 25,
@@ -30,11 +31,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
   },
+  h6:{
+    fontSize: 18,
+    fontWeight:'500',
+    color:'#000',
+  },
   text: {
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: '600',
     lineHeight: 20,
     color: '#000',
+    marginTop:10
   },
   btn: {
     fontWeight: '500',
@@ -87,6 +94,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 10,
   },
+  inputfield:{
+    backgroundColor:'#F2F2F2',
+    borderRadius:5,
+    borderColor:'#898585',
+    borderWidth:1,
+    fontSize:18,
+    paddingLeft:10,
+  },
   textfield_wrapper: {
     width: '100%',
     marginBottom: 15,
@@ -105,5 +120,33 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 4,
   },
+  orders_wrapper:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    marginTop:10
+  },
+  ordersbox:{
+    flex:1,
+    backgroundColor:'#F4F3F3',
+    borderRadius:16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    padding:20,
+    margin:7
+
+  },
+  header:{
+    flexDirection:'row',
+    alignItems:'center',
+    position: 'absolute',
+    top: 80,
+    width: '100%',
+    paddingHorizontal: 15,
+
+  }
 });
 export default styles;

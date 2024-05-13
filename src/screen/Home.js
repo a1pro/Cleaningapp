@@ -10,8 +10,11 @@ import {
 import React from 'react';
 import styles from '../styles/Styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MyOrders from '../component/MyOrders';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
@@ -27,7 +30,7 @@ const Home = () => {
             <Text style={[styles.h4, {color: '#25435F'}]}>Sonu</Text>
           </View>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.navigate("EditProfile")}>
           <Icon name="settings-suggest" size={35} color="#25435F" />
         </TouchableOpacity>
       </View>
@@ -37,6 +40,10 @@ const Home = () => {
           <TouchableOpacity>
             <Text style={styles.text}>Find Helper</Text>
           </TouchableOpacity>
+        </View>
+        {/* MyOrders component */}
+        <View>
+          <MyOrders />
         </View>
       </View>
     </ScrollView>

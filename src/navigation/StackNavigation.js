@@ -5,6 +5,7 @@ import Login from '../screen/Login';
 import BottomtabNavigation from './BottomtabNavigation';
 import SplashScreen from '../screen/SplashScreen';
 import LoginOption from '../screen/LoginOption';
+import EditProfile from '../screen/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,11 @@ const StackNavigation = () => {
        <Stack.Screen
         name="Login"
         component={Login}
+        options={{headerShown: false}}
+      />
+       <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={{headerShown: false}}
       />
       <Stack.Screen
