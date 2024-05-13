@@ -1,8 +1,24 @@
 import {View, Text, Image, SafeAreaView} from 'react-native';
 import styles from '../styles/Styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginOption = ({navigation}) => {
+  
+  // get token from AsyncStorage
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    AsyncStorage.getItem('token').then(value => {
+      if (value !== null) {
+        setToken(value);
+        console.log('token', value);
+      }
+    });
+  }, []);
+  if (token) {
+    navigation.navigate('Home');
+  }
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{marginTop: 1}}>

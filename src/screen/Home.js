@@ -7,14 +7,29 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from '../styles/Styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MyOrders from '../component/MyOrders';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
   const navigation = useNavigation();
+
+  // get token from AsyncStorage
+  const [token, setToken] = React.useState(null);
+  useEffect(() => {
+    AsyncStorage.getItem('token').then(value => {
+      if (value !== null) {
+        setToken(value);
+        console.log('token', value);
+      }
+    });
+  }, []);
+  if (!token) {
+    navigation.navigate('Login');
+  }
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
@@ -30,7 +45,7 @@ const Home = () => {
             <Text style={[styles.h4, {color: '#25435F'}]}>Sonu</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={()=>navigation.navigate("EditProfile")}>
+        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
           <Icon name="settings-suggest" size={35} color="#25435F" />
         </TouchableOpacity>
       </View>
