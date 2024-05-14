@@ -22,6 +22,7 @@ import styles from '../styles/Styles';
 import axios from 'axios';
 import { Base_url } from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Popup from '../component/Popup';
 
 const validationSchema = yup.object().shape({
   fname: yup.string().required('First name is required'),
@@ -37,6 +38,7 @@ const validationSchema = yup.object().shape({
 const EditProfile = () => {
   const [singleFile, setSingleFile] = useState(null);
   const navigation = useNavigation();
+  const [showModal,setShowModal] = useState(false);
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
 
@@ -117,7 +119,7 @@ const EditProfile = () => {
           </TouchableOpacity>
           <Text style={[styles.h3, {marginLeft: 20}]}>Edit Profile</Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>setShowModal(true)}>
           <MaterialCommunityIcons name="dots-vertical" size={25} color="#000" />
         </TouchableOpacity>
       </View>
@@ -284,6 +286,7 @@ const EditProfile = () => {
           )}
         </Formik>
       </View>
+      <Popup showModal={showModal} setShowModal={setShowModal}/>
     </ScrollView>
   );
 };

@@ -129,7 +129,7 @@ const BookingForm = () => {
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
-              <Text style={styles.text}>Booking Date</Text>
+                <Text style={styles.text}>Booking Date</Text>
                 <TouchableOpacity
                   onPress={showDatepicker}
                   style={[
@@ -145,7 +145,8 @@ const BookingForm = () => {
                     placeholder="Select date"
                     placeholderTextColor="#000"
                     value={formatDate(date)}
-                    editable={false} // Making TextInput non-editable, only for display purpose
+                    style={{fontSize: 16, color: '#000'}}
+                    editable={false}
                   />
                   <MaterialIcons name="date-range" size={30} />
                 </TouchableOpacity>
