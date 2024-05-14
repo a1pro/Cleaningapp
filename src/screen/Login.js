@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
-import {Image, Text, TextInput, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Image, Text, TextInput, View} from 'react-native';
 import styles from '../styles/Styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Base_url } from '../Apiurl';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -17,11 +20,47 @@ const validationSchema = yup.object().shape({
 const Login = ({navigation}) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  //Login handleSubmit function
-  const handleSubmit = async values => {
-    console.log('values', values);
-    navigation.navigate('Home')
+  //Login Api
+  const handleSubmit = async (values) => {
+    try {
+      console.log('values', values);
+    const res = await axios({
+      method: 'post',
+      url: Base_url.login,
+      data:{
+        email: values.email,
+        password: values.password
+      }
+    })
+    if(res.data.success=== true){
+      const key = res.data.data.token;
+        // Store the token in AsyncStorage
+        await AsyncStorage.setItem('token', key);
+      Alert.alert(res.data.message)
+      navigation.navigate('Home');
+    }
+    else{
+      Alert.alert("Invalid credentials");
+    }
+    } catch (error) {
+      Alert.alert("Invalid credentials")
+        console.log(error);
+    }
   };
+
+    // get token from AsyncStorage
+    const [token, setToken] = useState(null);
+    useEffect(() => {
+      AsyncStorage.getItem('token').then(value => {
+        if (value !== null) {
+          setToken(value);
+          console.log('token', value);
+        }
+      });
+    }, []);
+    if (token) {
+      navigation.navigate('Home');
+    }
   return (
     <>
       <View style={{marginTop: 1}}>
