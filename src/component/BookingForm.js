@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
@@ -15,24 +16,39 @@ import styles from '../styles/Styles';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
-import { useState } from 'react';
+import {useState} from 'react';
 
 const validationSchema = yup.object().shape({
-  firstName: yup.string().required('FirstName is required'),
-  lastName: yup.string().required('LastName is required'),
-  userName: yup.string().required('UserName is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  contactNumber: yup.string().required('Contact number is required'),
-  address: yup.string().required('Address is required'),
+  required_cleaners: yup.string().required('Cleaners are required'),
+  booking_type: yup.string().required('Booking type is required'),
+  duration: yup.string().required('Duration is required'),
+  start_time: yup.string().required('Start time is required'),
 });
 
 const BookingForm = () => {
   const navigation = useNavigation();
-  const [selectedValue,setSelectedValue] = useState()
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
-  const handleSubmit = async values => {
-    console.log('values', values);
-    navigation.navigate('Home');
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+  const formatDate = date => {
+    // Formatting the date as you prefer
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -61,16 +77,15 @@ const BookingForm = () => {
         </View>
         <Formik
           initialValues={{
-            firstName: '',
-            lastName: '',
-            userName: '',
-            email: '',
-            contactNumber: '',
-            address: '',
+            required_cleaners: '',
+            booking_type: '',
+            duration: '',
+            start_time: '',
           }}
           validationSchema={validationSchema}
           onSubmit={values => handleSubmit(values)}>
           {({
+            selectedValue,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -82,69 +97,99 @@ const BookingForm = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Required Cleaners</Text>
                 <Picker
-                  selectedValue={selectedValue}
+                  selectedValue={values.required_cleaners}
                   style={styles.inputfield}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }>
+                  onValueChange={handleChange('required_cleaners')}
+                  onBlur={handleBlur('required_cleaners')}>
                   <Picker.Item label="Select One" value="" />
                   <Picker.Item label="Option 1" value="option1" />
                   <Picker.Item label="Option 2" value="option2" />
                   <Picker.Item label="Option 3" value="option3" />
                 </Picker>
-                {touched.firstName && errors.firstName && (
-                  <Text style={styles.errortext}>{errors.firstName}</Text>
+                {touched.required_cleaners && errors.required_cleaners && (
+                  <Text style={styles.errortext}>
+                    {errors.required_cleaners}
+                  </Text>
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Booking Type</Text>
                 <Picker
-                  selectedValue={selectedValue}
+                  selectedValue={values.booking_type}
                   style={styles.inputfield}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }>
+                  onValueChange={handleChange('booking_type')}
+                  onBlur={handleBlur('booking_type')}>
                   <Picker.Item label="Booking Type" value="" />
                   <Picker.Item label="Option 1" value="option1" />
                   <Picker.Item label="Option 2" value="option2" />
                   <Picker.Item label="Option 3" value="option3" />
                 </Picker>
-                {touched.lastName && errors.lastName && (
-                  <Text style={styles.errortext}>{errors.lastName}</Text>
+                {touched.booking_type && errors.booking_type && (
+                  <Text style={styles.errortext}>{errors.booking_type}</Text>
+                )}
+              </View>
+              <View style={styles.textfield_wrapper}>
+              <Text style={styles.text}>Booking Date</Text>
+                <TouchableOpacity
+                  onPress={showDatepicker}
+                  style={[
+                    styles.inputfield,
+                    {
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      paddingRight: 15,
+                    },
+                  ]}>
+                  <TextInput
+                    placeholder="Select date"
+                    placeholderTextColor="#000"
+                    value={formatDate(date)}
+                    editable={false} // Making TextInput non-editable, only for display purpose
+                  />
+                  <MaterialIcons name="date-range" size={30} />
+                </TouchableOpacity>
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="date"
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                  />
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Select Duration</Text>
                 <Picker
-                  selectedValue={selectedValue}
+                  selectedValue={values.duration}
                   style={styles.inputfield}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }>
+                  onValueChange={handleChange('duration')}
+                  onBlur={handleBlur('duration')}>
                   <Picker.Item label="Select Duration" value="" />
                   <Picker.Item label="Option 1" value="option1" />
                   <Picker.Item label="Option 2" value="option2" />
                   <Picker.Item label="Option 3" value="option3" />
                 </Picker>
-                {touched.userName && errors.userName && (
-                  <Text style={styles.errortext}>{errors.userName}</Text>
+                {touched.duration && errors.duration && (
+                  <Text style={styles.errortext}>{errors.duration}</Text>
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Select Start Time</Text>
                 <Picker
-                  selectedValue={selectedValue}
+                  selectedValue={values.start_time}
                   style={styles.inputfield}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
-                  }>
+                  onValueChange={handleChange('start_time')}
+                  onBlur={handleBlur('start_time')}>
                   <Picker.Item label="Select Start Time" value="" />
                   <Picker.Item label="Option 1" value="option1" />
                   <Picker.Item label="Option 2" value="option2" />
                   <Picker.Item label="Option 3" value="option3" />
                 </Picker>
-                {touched.email && errors.email && (
-                  <Text style={styles.errortext}>{errors.email}</Text>
+                {touched.start_time && errors.start_time && (
+                  <Text style={styles.errortext}>{errors.start_time}</Text>
                 )}
               </View>
               <TouchableOpacity

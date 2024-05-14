@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Base_url } from '../Apiurl';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -25,7 +26,7 @@ const Login = ({navigation}) => {
       console.log('values', values);
     const res = await axios({
       method: 'post',
-      url: ' https://crmwebcleaning.a1professionals.net/api/v1/login',
+      url: Base_url.login,
       data:{
         email: values.email,
         password: values.password

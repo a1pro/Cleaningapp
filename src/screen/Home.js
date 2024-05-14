@@ -13,10 +13,17 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MyOrders from '../component/MyOrders';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUserdata} from '../redux/UserdataSlice';
 
 const Home = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {user} = useSelector(state => state.user);
 
+  useEffect(() => {
+    dispatch(getUserdata());
+  }, [dispatch]);
   // get token from AsyncStorage
   const [token, setToken] = React.useState(null);
   useEffect(() => {
@@ -41,8 +48,8 @@ const Home = () => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image source={require('../assets/profile-img.png')} />
           <View style={{marginLeft: 10}}>
-            <Text style={{color: '#25435F'}}>Morning</Text>
-            <Text style={[styles.h4, {color: '#25435F'}]}>Sonu</Text>
+            <Text style={[styles.h4, {color: '#25435F'}]}>{user.fname}</Text>
+            {/* <Text style={{color: '#25435F'}}>{user.lname}</Text> */}
           </View>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>

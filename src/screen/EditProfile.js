@@ -1,47 +1,57 @@
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
-  Button,
   ScrollView,
   TextInput,
   ImageBackground,
   Image,
+  StyleSheet,
+  Alert,
 } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
-import styles from '../styles/Styles';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DocumentPicker from 'react-native-document-picker';
-import {useState} from 'react';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUserdata} from '../redux/UserdataSlice';
+import styles from '../styles/Styles';
+import axios from 'axios';
+import { Base_url } from '../Apiurl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const validationSchema = yup.object().shape({
-  firstName: yup.string().required('FirstName is required'),
-  lastName: yup.string().required('LastName is required'),
-  userName: yup.string().required('UserName is required'),
+  fname: yup.string().required('First name is required'),
+  lname: yup.string().required('Last name is required'),
+  company_name: yup.string().required('Company name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
-  contactNumber: yup.string().required('Contact number is required'),
+  phone_no: yup.string().required('Contact number is required'),
   address: yup.string().required('Address is required'),
+  city: yup.string().required('City is required'),
+  zip_code: yup.string().required('Zip code is required'),
 });
 
 const EditProfile = () => {
-  const [singleFile, setSingleFile] = useState({});
+  const [singleFile, setSingleFile] = useState(null);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {user} = useSelector(state => state.user);
+
+
+  useEffect(() => {
+    dispatch(getUserdata());
+  }, [dispatch]);
 
   const selectOneFile = async () => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + JSON.stringify(res));
-      console.log('URI : ' + res.uri);
-      console.log('Type : ' + res.type);
-      console.log('File Name : ' + res.name);
-      console.log('File Size : ' + res.size);
       setSingleFile(res[0]);
-      console.log('singleFile', singleFile);
+      console.log('singleFile', res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         alert('Canceled from single doc picker');
@@ -52,16 +62,54 @@ const EditProfile = () => {
     }
   };
 
-  const handleSubmit = async values => {
-    console.log('values', values);
-    navigation.navigate('Home');
+
+  //Edit profile data api
+  const handleSubmit = async (values) => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+    
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: Base_url.generateUserUpdate,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token,
+        },
+        data: {
+          fname: values.fname,
+          lname: values.lname,
+          company_name: values.company_name,
+          email: values.email,
+          phone_no: values.phone_no,
+          address1: values.address,
+          city: values.city,
+          zipcode: values.zip_code
+        }
+      });
+  
+      if (res.data.success === true) {
+        Alert.alert(res.data.message);
+        navigation.navigate('Home');
+      } else {
+        Alert.alert("Error", res.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An error occurred while updating the profile.");
+    }
   };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
         source={require('../assets/circle1.png')}
         resizeMode="cover"
-        style={{width: '85%', height: 200, marginTop: 1}}></ImageBackground>
+        style={{width: '85%', height: 200, marginTop: 1}}
+      />
       <View style={styles.header}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -74,32 +122,38 @@ const EditProfile = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        
-        {/* profile picture */}
-        {singleFile && (
-            <View style={{alignItems:'center',marginTop:-40}}>
-              <Image
-                source={{uri: singleFile.uri}}
-                style={{width: 130, height: 130,borderRadius:100}}
-              />
-              <TouchableOpacity onPress={selectOneFile}>
-                <Text style={styles.text}>Edit Picture</Text>
-              </TouchableOpacity>
-            </View>
-        
-        )}
+        {/* Profile picture */}
+        <View style={{alignItems: 'center', marginTop: -40}}>
+          {singleFile ? (
+            <Image
+              source={{uri: singleFile.uri}}
+              style={{width: 130, height: 130, borderRadius: 100}}
+            />
+          ) : (
+            <Image
+              source={{uri: user?.avatar}}
+              style={{width: 130, height: 130, borderRadius: 100}}
+            />
+          )}
+          <TouchableOpacity onPress={selectOneFile}>
+            <Text style={styles.text}>Edit Picture</Text>
+          </TouchableOpacity>
+        </View>
 
         <Formik
+          enableReinitialize
           initialValues={{
-            firstName: '',
-            lastName: '',
-            userName: '',
-            email: '',
-            contactNumber: '',
-            address: '',
+            fname: user.fname || '',
+            lname: user.lname || '',
+            company_name: user.company_name || '',
+            email: user.email || '',
+            phone_no: user.phone_no || '',
+            address: user.address1 || '',
+            city: user.city || '',
+            zip_code: user.zipcode || '',
           }}
           validationSchema={validationSchema}
-          onSubmit={values => handleSubmit(values)}>
+          onSubmit={handleSubmit}>
           {({
             handleChange,
             handleBlur,
@@ -115,12 +169,12 @@ const EditProfile = () => {
                   placeholder="Sonu"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
-                  value={values.firstName}
-                  onChangeText={handleChange('firstName')}
-                  onBlur={handleBlur('firstName')}
+                  value={values.fname}
+                  onChangeText={handleChange('fname')}
+                  onBlur={handleBlur('fname')}
                 />
-                {touched.firstName && errors.firstName && (
-                  <Text style={styles.errortext}>{errors.firstName}</Text>
+                {touched.fname && errors.fname && (
+                  <Text style={styles.errortext}>{errors.fname}</Text>
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
@@ -129,26 +183,26 @@ const EditProfile = () => {
                   placeholder="Kumar"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
-                  value={values.lastName}
-                  onChangeText={handleChange('lastName')}
-                  onBlur={handleBlur('lastName')}
+                  value={values.lname}
+                  onChangeText={handleChange('lname')}
+                  onBlur={handleBlur('lname')}
                 />
-                {touched.lastName && errors.lastName && (
-                  <Text style={styles.errortext}>{errors.lastName}</Text>
+                {touched.lname && errors.lname && (
+                  <Text style={styles.errortext}>{errors.lname}</Text>
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
-                <Text style={styles.text}>User Name</Text>
+                <Text style={styles.text}>Company Name</Text>
                 <TextInput
-                  placeholder="Sonu123"
+                  placeholder="eweb"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
-                  value={values.userName}
-                  onChangeText={handleChange('userName')}
-                  onBlur={handleBlur('userName')}
+                  value={values.company_name}
+                  onChangeText={handleChange('company_name')}
+                  onBlur={handleBlur('company_name')}
                 />
-                {touched.userName && errors.userName && (
-                  <Text style={styles.errortext}>{errors.userName}</Text>
+                {touched.company_name && errors.company_name && (
+                  <Text style={styles.errortext}>{errors.company_name}</Text>
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
@@ -171,18 +225,18 @@ const EditProfile = () => {
                   placeholder="9504425494"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
-                  value={values.contactNumber}
-                  onChangeText={handleChange('contactNumber')}
-                  onBlur={handleBlur('contactNumber')}
+                  value={values.phone_no}
+                  onChangeText={handleChange('phone_no')}
+                  onBlur={handleBlur('phone_no')}
                 />
-                {touched.contactNumber && errors.contactNumber && (
-                  <Text style={styles.errortext}>{errors.contactNumber}</Text>
+                {touched.phone_no && errors.phone_no && (
+                  <Text style={styles.errortext}>{errors.phone_no}</Text>
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Address</Text>
                 <TextInput
-                  placeholder="Mattor,Sector-70,Mohali"
+                  placeholder="Mattor, Sector-70, Mohali"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.address}
@@ -191,6 +245,34 @@ const EditProfile = () => {
                 />
                 {touched.address && errors.address && (
                   <Text style={styles.errortext}>{errors.address}</Text>
+                )}
+              </View>
+              <View style={styles.textfield_wrapper}>
+                <Text style={styles.text}>City</Text>
+                <TextInput
+                  placeholder="Mohali"
+                  placeholderTextColor="#000"
+                  style={styles.inputfield}
+                  value={values.city}
+                  onChangeText={handleChange('city')}
+                  onBlur={handleBlur('city')}
+                />
+                {touched.city && errors.city && (
+                  <Text style={styles.errortext}>{errors.city}</Text>
+                )}
+              </View>
+              <View style={styles.textfield_wrapper}>
+                <Text style={styles.text}>Zip Code</Text>
+                <TextInput
+                  placeholder="140301"
+                  placeholderTextColor="#000"
+                  style={styles.inputfield}
+                  value={values.zip_code}
+                  onChangeText={handleChange('zip_code')}
+                  onBlur={handleBlur('zip_code')}
+                />
+                {touched.zip_code && errors.zip_code && (
+                  <Text style={styles.errortext}>{errors.zip_code}</Text>
                 )}
               </View>
               <TouchableOpacity
@@ -205,4 +287,5 @@ const EditProfile = () => {
     </ScrollView>
   );
 };
+
 export default EditProfile;
