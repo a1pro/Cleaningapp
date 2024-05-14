@@ -147,6 +147,11 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 15,
 
+  },
+  modalcontianer:{
+    backgroundColor:'#fff',
+    padding:20,
+    borderRadius:10
   }
 });
 export default styles;
