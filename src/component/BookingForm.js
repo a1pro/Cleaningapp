@@ -7,6 +7,7 @@ import {
   TextInput,
   ImageBackground,
   Image,
+  Alert,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
@@ -20,12 +21,21 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CheckBox from '@react-native-community/checkbox';
 
 const validationSchema = yup.object().shape({
   required_cleaners: yup.string().required('Cleaners are required'),
   booking_type: yup.string().required('Booking type is required'),
   duration: yup.string().required('Duration is required'),
   start_time: yup.string().required('Start time is required'),
+  address1: yup.string().required('Service address1 is required'),
+  address2: yup.string().required('Service address2 is required'),
+  servicecity: yup.string().required('Service city is required'),
+  servicepostcode: yup.string().required('Service post code is required'),
+  billingaddress1: yup.string().required('Billing address1 is required'),
+  billingaddress2: yup.string().required('Billing address2 is required'),
+  billingcity: yup.string().required('Billing city is required'),
+  billingpostcode: yup.string().required('Billing Post code is required'),
 });
 
 const BookingForm = () => {
@@ -36,6 +46,8 @@ const BookingForm = () => {
   const [duration, setDuration] = useState([]);
   const [bookingTypes, setBookingTypes] = useState([]);
   const [timeSlot, setTimeSlot] = useState([]);
+  const [showAddress, setShowAddress] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -85,17 +97,50 @@ const BookingForm = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getbookingvalue();
   }, []);
 
-  useEffect(() => {
-    console.log('cleaners', cleanersData);
-    console.log('duration', duration);
-    console.log('booking types', bookingTypes);
-    console.log('time slots', timeSlot);
-  }, [cleanersData, duration, bookingTypes, timeSlot]);
+  // Send booking value
+  const handleSubmit = async values => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      console.error('No token found');
+      return;
+    }
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: Base_url.booking_cleaner,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        data: {
+          cleaners: values.required_cleaners,
+          booking_types: values.booking_type,
+          duration: values.duration,
+          time_slots: values.start_time,
+          booking_date: formatDate(date),
+          service_address1:values.address1,
+          service_address2:values.address2,
+          service_city:values.servicecity,
+          service_zipcode:values.servicepostcode,
+          billing_address1:values.billingaddress1,
+          billing_address2:values.billingaddress2,
+          billing_city:values.billingcity,
+          billing_zipcode:values.billingpostcode,
+        },
+      });
+      if (res.data.status === true) {
+        Alert.alert(res.data.message);
+        console.log("bookingvalue",values);
+        navigation.navigate('Home');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
@@ -127,6 +172,14 @@ const BookingForm = () => {
             booking_type: '',
             duration: '',
             start_time: '',
+            address1: '',
+            address2: '',
+            servicecity: '',
+            servicepostcode: '',
+            billingaddress1: '',
+            billingaddress2: '',
+            billingcity: '',
+            billingpostcode: '',
           }}
           validationSchema={validationSchema}
           onSubmit={values => handleSubmit(values)}>
@@ -147,14 +200,11 @@ const BookingForm = () => {
                   onValueChange={handleChange('required_cleaners')}
                   onBlur={handleBlur('required_cleaners')}>
                   <Picker.Item label="Select One" value="" />
-                  {cleanersData &&
-                    cleanersData.map((data, index) => (
-                      <Picker.Item
-                        key={index}
-                        label={data.fname}
-                        value={data.fname}
-                      />
-                    ))}
+                  <Picker.Item label="1" value="1" />
+                  <Picker.Item label="2" value="2" />
+                  <Picker.Item label="3" value="3" />
+                  <Picker.Item label="4" value="4" />
+                  <Picker.Item label="5" value="5" />
                 </Picker>
                 {touched.required_cleaners && errors.required_cleaners && (
                   <Text style={styles.errortext}>
@@ -213,6 +263,7 @@ const BookingForm = () => {
                     is24Hour={true}
                     display="default"
                     onChange={onChange}
+                    minimumDate={new Date()}
                   />
                 )}
               </View>
@@ -259,6 +310,164 @@ const BookingForm = () => {
                 {touched.start_time && errors.start_time && (
                   <Text style={styles.errortext}>{errors.start_time}</Text>
                 )}
+              </View>
+              {/* Cleaners Details */}
+              <TouchableOpacity
+                onPress={() => setShowAddress(!showAddress)}
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#000',
+                  paddingBottom: 10,
+                }}>
+                <Text style={styles.h6}>Cleaners Details</Text>
+              </TouchableOpacity>
+              <View
+                style={showAddress ? {display: 'block'} : {display: 'none'}}>
+                {/* Service Address */}
+                <View style={{paddingTop: 20}}>
+                  <View style={{marginBottom: 10}}>
+                    <Text style={[styles.h5, {color: '#000'}]}>
+                      Service Address
+                    </Text>
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>Service Address1</Text>
+                    <TextInput
+                      placeholder="address1"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.address1}
+                      onChangeText={handleChange('address1')}
+                      onBlur={handleBlur('address1')}
+                    />
+                    {touched.address1 && errors.address1 && (
+                      <Text style={styles.errortext}>{errors.address1}</Text>
+                    )}
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>Service Address2</Text>
+                    <TextInput
+                      placeholder="address2"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.address2}
+                      onChangeText={handleChange('address2')}
+                      onBlur={handleBlur('address2')}
+                    />
+                    {touched.address2 && errors.address2 && (
+                      <Text style={styles.errortext}>{errors.address2}</Text>
+                    )}
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>City/Town</Text>
+                    <TextInput
+                      placeholder="city"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.servicecity}
+                      onChangeText={handleChange('servicecity')}
+                      onBlur={handleBlur('servicecity')}
+                    />
+                    {touched.servicecity && errors.servicecity && (
+                      <Text style={styles.errortext}>{errors.servicecity}</Text>
+                    )}
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>Post Code</Text>
+                    <TextInput
+                      placeholder="postcode"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.servicepostcode}
+                      onChangeText={handleChange('servicepostcode')}
+                      onBlur={handleBlur('servicepostcode')}
+                    />
+                    {touched.servicepostcode && errors.servicepostcode && (
+                      <Text style={styles.errortext}>
+                        {errors.servicepostcode}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+                {/* Billing Address */}
+                <View style={{paddingTop: 20}}>
+                  <View
+                    style={{
+                      marginBottom: 10,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <CheckBox
+                      value={checked}
+                      onValueChange={newValue => setChecked(newValue)}
+                    />
+                    <Text style={[styles.h5, {color: '#000', marginHorizontal:20}]}>
+                      Billing Address Same
+                    </Text>
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>Billing Address1</Text>
+                    <TextInput
+                      placeholder="address1"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.billingaddress1}
+                      onChangeText={handleChange('billingaddress1')}
+                      onBlur={handleBlur('billingaddress1')}
+                    />
+                    {touched.billingaddress1 && errors.billingaddress1 && (
+                      <Text style={styles.errortext}>
+                        {errors.billingaddress1}
+                      </Text>
+                    )}
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>Billing Address2</Text>
+                    <TextInput
+                      placeholder="address2"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.billingaddress2}
+                      onChangeText={handleChange('billingaddress2')}
+                      onBlur={handleBlur('billingaddress2')}
+                    />
+                    {touched.billingaddress2 && errors.billingaddress2 && (
+                      <Text style={styles.errortext}>
+                        {errors.billingaddress2}
+                      </Text>
+                    )}
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>City/Town</Text>
+                    <TextInput
+                      placeholder="city"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.billingcity}
+                      onChangeText={handleChange('billingcity')}
+                      onBlur={handleBlur('billingcity')}
+                    />
+                    {touched.billingcity && errors.billingcity && (
+                      <Text style={styles.errortext}>{errors.billingcity}</Text>
+                    )}
+                  </View>
+                  <View style={styles.textfield_wrapper}>
+                    <Text style={styles.text}>Post Code</Text>
+                    <TextInput
+                      placeholder="postcode"
+                      placeholderTextColor="#000"
+                      style={styles.inputfield}
+                      value={values.billingpostcode}
+                      onChangeText={handleChange('billingpostcode')}
+                      onBlur={handleBlur('billingpostcode')}
+                    />
+                    {touched.billingpostcode && errors.billingpostcode && (
+                      <Text style={styles.errortext}>
+                        {errors.billingpostcode}
+                      </Text>
+                    )}
+                  </View>
+                </View>
               </View>
               <TouchableOpacity
                 style={[styles.btn1, {marginTop: 20}]}
