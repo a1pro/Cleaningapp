@@ -122,25 +122,48 @@ const BookingForm = () => {
           duration: values.duration,
           time_slots: values.start_time,
           booking_date: formatDate(date),
-          service_address1:values.address1,
-          service_address2:values.address2,
-          service_city:values.servicecity,
-          service_zipcode:values.servicepostcode,
-          billing_address1:values.billingaddress1,
-          billing_address2:values.billingaddress2,
-          billing_city:values.billingcity,
-          billing_zipcode:values.billingpostcode,
+          service_address1: values.address1,
+          service_address2: values.address2,
+          service_city: values.servicecity,
+          service_zipcode: values.servicepostcode,
+          billing_address1: values.billingaddress1,
+          billing_address2: values.billingaddress2,
+          billing_city: values.billingcity,
+          billing_zipcode: values.billingpostcode,
         },
       });
       if (res.data.status === true) {
         Alert.alert(res.data.message);
-        console.log("bookingvalue",values);
+        console.log('bookingvalue', values);
         navigation.navigate('Home');
       }
     } catch (error) {
       console.log(error);
     }
   };
+  //Checkbox Billing Address Same
+  // const handleCheckBoxToggle = () => {
+  //   if (checked) {
+  //     // If the CheckBox is checked, clear the billing address fields
+  //     setValues({
+  //       ...values,
+  //       billingaddress1: '',
+  //       billingaddress2: '',
+  //       billingcity: '',
+  //       billingpostcode: '',
+  //     });
+  //   } else {
+  //     // If the CheckBox is unchecked, copy service address to billing address
+  //     setValues({
+  //       ...values,
+  //       billingaddress1: values.address1,
+  //       billingaddress2: values.address2,
+  //       billingcity: values.servicecity,
+  //       billingpostcode: values.servicepostcode,
+  //     });
+  //   }
+  //   setChecked(!checked); // Toggle the CheckBox
+  // };
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
@@ -190,6 +213,7 @@ const BookingForm = () => {
             values,
             errors,
             touched,
+            setFieldValue,
           }) => (
             <View style={{marginTop: 20}}>
               <View style={styles.textfield_wrapper}>
@@ -321,154 +345,181 @@ const BookingForm = () => {
                 }}>
                 <Text style={styles.h6}>Cleaners Details</Text>
               </TouchableOpacity>
+
+              {/* Service Address */}
               <View
-                style={showAddress ? {display: 'block'} : {display: 'none'}}>
-                {/* Service Address */}
-                <View style={{paddingTop: 20}}>
-                  <View style={{marginBottom: 10}}>
-                    <Text style={[styles.h5, {color: '#000'}]}>
-                      Service Address
-                    </Text>
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>Service Address1</Text>
-                    <TextInput
-                      placeholder="address1"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.address1}
-                      onChangeText={handleChange('address1')}
-                      onBlur={handleBlur('address1')}
-                    />
-                    {touched.address1 && errors.address1 && (
-                      <Text style={styles.errortext}>{errors.address1}</Text>
-                    )}
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>Service Address2</Text>
-                    <TextInput
-                      placeholder="address2"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.address2}
-                      onChangeText={handleChange('address2')}
-                      onBlur={handleBlur('address2')}
-                    />
-                    {touched.address2 && errors.address2 && (
-                      <Text style={styles.errortext}>{errors.address2}</Text>
-                    )}
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>City/Town</Text>
-                    <TextInput
-                      placeholder="city"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.servicecity}
-                      onChangeText={handleChange('servicecity')}
-                      onBlur={handleBlur('servicecity')}
-                    />
-                    {touched.servicecity && errors.servicecity && (
-                      <Text style={styles.errortext}>{errors.servicecity}</Text>
-                    )}
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>Post Code</Text>
-                    <TextInput
-                      placeholder="postcode"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.servicepostcode}
-                      onChangeText={handleChange('servicepostcode')}
-                      onBlur={handleBlur('servicepostcode')}
-                    />
-                    {touched.servicepostcode && errors.servicepostcode && (
-                      <Text style={styles.errortext}>
-                        {errors.servicepostcode}
-                      </Text>
-                    )}
-                  </View>
+                style={[
+                  {paddingTop: 20},
+                  showAddress ? {display: 'block'} : {display: 'none'},
+                ]}>
+                <View style={{marginBottom: 10}}>
+                  <Text style={[styles.h5, {color: '#000'}]}>
+                    Service Address
+                  </Text>
                 </View>
-                {/* Billing Address */}
-                <View style={{paddingTop: 20}}>
-                  <View
-                    style={{
-                      marginBottom: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <CheckBox
-                      value={checked}
-                      onValueChange={newValue => setChecked(newValue)}
-                    />
-                    <Text style={[styles.h5, {color: '#000', marginHorizontal:20}]}>
-                      Billing Address Same
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>Service Address1</Text>
+                  <TextInput
+                    placeholder="address1"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.address1}
+                    onChangeText={handleChange('address1')}
+                    onBlur={handleBlur('address1')}
+                  />
+                  {touched.address1 && errors.address1 && (
+                    <Text style={styles.errortext}>{errors.address1}</Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>Service Address2</Text>
+                  <TextInput
+                    placeholder="address2"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.address2}
+                    onChangeText={handleChange('address2')}
+                    onBlur={handleBlur('address2')}
+                  />
+                  {touched.address2 && errors.address2 && (
+                    <Text style={styles.errortext}>{errors.address2}</Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>City/Town</Text>
+                  <TextInput
+                    placeholder="city"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.servicecity}
+                    onChangeText={handleChange('servicecity')}
+                    onBlur={handleBlur('servicecity')}
+                  />
+                  {touched.servicecity && errors.servicecity && (
+                    <Text style={styles.errortext}>{errors.servicecity}</Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>Post Code</Text>
+                  <TextInput
+                    placeholder="postcode"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.servicepostcode}
+                    onChangeText={handleChange('servicepostcode')}
+                    onBlur={handleBlur('servicepostcode')}
+                  />
+                  {touched.servicepostcode && errors.servicepostcode && (
+                    <Text style={styles.errortext}>
+                      {errors.servicepostcode}
                     </Text>
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>Billing Address1</Text>
-                    <TextInput
-                      placeholder="address1"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.billingaddress1}
-                      onChangeText={handleChange('billingaddress1')}
-                      onBlur={handleBlur('billingaddress1')}
-                    />
-                    {touched.billingaddress1 && errors.billingaddress1 && (
-                      <Text style={styles.errortext}>
-                        {errors.billingaddress1}
-                      </Text>
-                    )}
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>Billing Address2</Text>
-                    <TextInput
-                      placeholder="address2"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.billingaddress2}
-                      onChangeText={handleChange('billingaddress2')}
-                      onBlur={handleBlur('billingaddress2')}
-                    />
-                    {touched.billingaddress2 && errors.billingaddress2 && (
-                      <Text style={styles.errortext}>
-                        {errors.billingaddress2}
-                      </Text>
-                    )}
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>City/Town</Text>
-                    <TextInput
-                      placeholder="city"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.billingcity}
-                      onChangeText={handleChange('billingcity')}
-                      onBlur={handleBlur('billingcity')}
-                    />
-                    {touched.billingcity && errors.billingcity && (
-                      <Text style={styles.errortext}>{errors.billingcity}</Text>
-                    )}
-                  </View>
-                  <View style={styles.textfield_wrapper}>
-                    <Text style={styles.text}>Post Code</Text>
-                    <TextInput
-                      placeholder="postcode"
-                      placeholderTextColor="#000"
-                      style={styles.inputfield}
-                      value={values.billingpostcode}
-                      onChangeText={handleChange('billingpostcode')}
-                      onBlur={handleBlur('billingpostcode')}
-                    />
-                    {touched.billingpostcode && errors.billingpostcode && (
-                      <Text style={styles.errortext}>
-                        {errors.billingpostcode}
-                      </Text>
-                    )}
-                  </View>
+                  )}
                 </View>
               </View>
+              {/* Billing Address */}
+              <View
+                style={[
+                  {paddingTop: 20},
+                  showAddress ? {display: 'block'} : {display: 'none'},
+                ]}>
+                <View
+                  style={{
+                    marginBottom: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  {showAddress && (
+                    <CheckBox
+                      value={checked}
+                      onValueChange={newValue => {
+                        setChecked(newValue);
+                        if (newValue) {
+                          setFieldValue('billingaddress1', values.address1);
+                          setFieldValue('billingaddress2', values.address2);
+                          setFieldValue('billingcity', values.servicecity);
+                          setFieldValue(
+                            'billingpostcode',
+                            values.servicepostcode,
+                          );
+                        } else {
+                          setFieldValue('billingaddress1', '');
+                          setFieldValue('billingaddress2', '');
+                          setFieldValue('billingcity', '');
+                          setFieldValue('billingpostcode', '');
+                        }
+                      }}
+                    />
+                  )}
+
+                  <Text
+                    style={[styles.h5, {color: '#000', marginHorizontal: 20}]}>
+                    Billing Address Same
+                  </Text>
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>Billing Address1</Text>
+                  <TextInput
+                    placeholder="address1"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.billingaddress1}
+                    onChangeText={handleChange('billingaddress1')}
+                    onBlur={handleBlur('billingaddress1')}
+                  />
+                  {touched.billingaddress1 && errors.billingaddress1 && (
+                    <Text style={styles.errortext}>
+                      {errors.billingaddress1}
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>Billing Address2</Text>
+                  <TextInput
+                    placeholder="address2"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.billingaddress2}
+                    onChangeText={handleChange('billingaddress2')}
+                    onBlur={handleBlur('billingaddress2')}
+                  />
+                  {touched.billingaddress2 && errors.billingaddress2 && (
+                    <Text style={styles.errortext}>
+                      {errors.billingaddress2}
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>City/Town</Text>
+                  <TextInput
+                    placeholder="city"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.billingcity}
+                    onChangeText={handleChange('billingcity')}
+                    onBlur={handleBlur('billingcity')}
+                  />
+                  {touched.billingcity && errors.billingcity && (
+                    <Text style={styles.errortext}>{errors.billingcity}</Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <Text style={styles.text}>Post Code</Text>
+                  <TextInput
+                    placeholder="postcode"
+                    placeholderTextColor="#000"
+                    style={styles.inputfield}
+                    value={values.billingpostcode}
+                    onChangeText={handleChange('billingpostcode')}
+                    onBlur={handleBlur('billingpostcode')}
+                  />
+                  {touched.billingpostcode && errors.billingpostcode && (
+                    <Text style={styles.errortext}>
+                      {errors.billingpostcode}
+                    </Text>
+                  )}
+                </View>
+              </View>
+
               <TouchableOpacity
                 style={[styles.btn1, {marginTop: 20}]}
                 onPress={handleSubmit}>
