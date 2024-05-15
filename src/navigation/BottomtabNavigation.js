@@ -5,6 +5,7 @@ import Icons from 'react-native-vector-icons/AntDesign';
 import Home from '../screen/Home';
 import Notification from '../screen/Notification';
 import BookingForm from '../component/BookingForm';
+import MyBooking from '../screen/MyBooking';
 
 const Tab = createBottomTabNavigator();
 const BottomtabNavigation = () => {
@@ -44,6 +45,14 @@ const BottomtabNavigation = () => {
         options={{
           headerShown: false,
           tabBarIcon: () => <Icons name="form" color="#25435F" size={30} />,
+        }}
+      />
+       <Tab.Screen
+        name="MyBooking"
+        component={MyBooking}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => <Icon name="today-sharp" color="#25435F" size={30} />,
         }}
       />
     </Tab.Navigator>

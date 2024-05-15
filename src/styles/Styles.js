@@ -152,6 +152,26 @@ const styles = StyleSheet.create({
     backgroundColor:'#fff',
     padding:20,
     borderRadius:10
+  },
+  activetabbtn:{
+    // backgroundColor:'#25435F',
+    borderRadius:20,
+    padding:15
+  },
+  tabbtn:{
+    // backgroundColor:'#F4F3F3',
+    borderRadius:20,
+    padding:15
+  },
+  activetabttext:{
+    color:'#fff',
+    fontSize:16,
+    fontWeight:'500',
+  },
+  tabttext:{
+    color:'#898585',
+    fontSize:16,
+    fontWeight:'500',
   }
 });
 export default styles;
