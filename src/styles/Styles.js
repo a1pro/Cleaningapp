@@ -172,6 +172,11 @@ const styles = StyleSheet.create({
     color:'#898585',
     fontSize:16,
     fontWeight:'500',
+  },
+  booking_heading:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
   }
 });
 export default styles;

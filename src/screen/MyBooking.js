@@ -9,6 +9,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommu
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import styles from '../styles/Styles';
 import {useState} from 'react';
+import AllBooking from './mybookingpage/AllBooking';
+import Completed from './mybookingpage/Completed';
+import InProcess from './mybookingpage/InProcess';
+import Cancelpage from './mybookingpage/Cancelpage';
 
 const MyBooking = () => {
   const [selectTab, setSelectTab] = useState('All');
@@ -82,6 +86,18 @@ const MyBooking = () => {
           <Text style={[styles.activetabttext,{color:selectTab==="Cancel"?"#fff":'#898585'}]}>Cancel</Text>
         </TouchableOpacity>
       </View>
+      {selectTab ==="All" &&(
+        <AllBooking/>
+      )}
+      {selectTab ==="Completed" &&(
+        <Completed/>
+      )}
+      {selectTab ==="In Process" &&(  
+        <InProcess/>
+        )}
+        {selectTab ==="Cancel" &&(
+          <Cancelpage/>
+          )}
     </ScrollView>
   );
 };
