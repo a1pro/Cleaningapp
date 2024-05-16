@@ -22,6 +22,8 @@ import axios from 'axios';
 import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
+import { getUserdata } from '../redux/UserdataSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const validationSchema = yup.object().shape({
   required_cleaners: yup.string().required('Cleaners are required'),
@@ -48,6 +50,9 @@ const BookingForm = () => {
   const [timeSlot, setTimeSlot] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [checked, setChecked] = useState(false);
+
+  const serviceAddress = useSelector((state)=>state.user.user);
+  const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -141,29 +146,12 @@ const BookingForm = () => {
       console.log(error);
     }
   };
-  //Checkbox Billing Address Same
-  // const handleCheckBoxToggle = () => {
-  //   if (checked) {
-  //     // If the CheckBox is checked, clear the billing address fields
-  //     setValues({
-  //       ...values,
-  //       billingaddress1: '',
-  //       billingaddress2: '',
-  //       billingcity: '',
-  //       billingpostcode: '',
-  //     });
-  //   } else {
-  //     // If the CheckBox is unchecked, copy service address to billing address
-  //     setValues({
-  //       ...values,
-  //       billingaddress1: values.address1,
-  //       billingaddress2: values.address2,
-  //       billingcity: values.servicecity,
-  //       billingpostcode: values.servicepostcode,
-  //     });
-  //   }
-  //   setChecked(!checked); // Toggle the CheckBox
-  // };
+ 
+  //Get userAddress from redux store
+  useEffect(()=>{
+    dispatch(getUserdata);
+  },[])
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
@@ -195,10 +183,10 @@ const BookingForm = () => {
             booking_type: '',
             duration: '',
             start_time: '',
-            address1: '',
-            address2: '',
-            servicecity: '',
-            servicepostcode: '',
+            address1:serviceAddress.address1 || '',
+            address2: serviceAddress.address2 ||'',
+            servicecity:serviceAddress.city ||'',
+            servicepostcode:serviceAddress.zipcode || '',
             billingaddress1: '',
             billingaddress2: '',
             billingcity: '',

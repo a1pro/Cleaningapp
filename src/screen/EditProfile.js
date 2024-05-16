@@ -20,7 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getUserdata} from '../redux/UserdataSlice';
 import styles from '../styles/Styles';
 import axios from 'axios';
-import { Base_url } from '../Apiurl';
+import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Popup from '../component/Popup';
 
@@ -31,6 +31,7 @@ const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
   phone_no: yup.string().required('Contact number is required'),
   address: yup.string().required('Address is required'),
+  address2: yup.string().required('Address2 is required'),
   city: yup.string().required('City is required'),
   zip_code: yup.string().required('Zip code is required'),
 });
@@ -38,10 +39,9 @@ const validationSchema = yup.object().shape({
 const EditProfile = () => {
   const [singleFile, setSingleFile] = useState(null);
   const navigation = useNavigation();
-  const [showModal,setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
-
 
   useEffect(() => {
     dispatch(getUserdata());
@@ -64,22 +64,21 @@ const EditProfile = () => {
     }
   };
 
-
   //Edit profile data api
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     const token = await AsyncStorage.getItem('token');
     if (!token) {
-      console.error("No token found");
+      console.error('No token found');
       return;
     }
-    
+
     try {
       const res = await axios({
         method: 'POST',
         url: Base_url.generateUserUpdate,
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token,
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
         },
         data: {
           fname: values.fname,
@@ -88,20 +87,21 @@ const EditProfile = () => {
           email: values.email,
           phone_no: values.phone_no,
           address1: values.address,
+          address2: values.address2,
           city: values.city,
-          zipcode: values.zip_code
-        }
+          zipcode: values.zip_code,
+        },
       });
-  
+
       if (res.data.success === true) {
         Alert.alert(res.data.message);
         navigation.navigate('Home');
       } else {
-        Alert.alert("Error", res.data.message);
+        Alert.alert('Error', res.data.message);
       }
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "An error occurred while updating the profile.");
+      Alert.alert('Error', 'An error occurred while updating the profile.');
     }
   };
 
@@ -119,7 +119,7 @@ const EditProfile = () => {
           </TouchableOpacity>
           <Text style={[styles.h3, {marginLeft: 20}]}>Edit Profile</Text>
         </View>
-        <TouchableOpacity onPress={()=>setShowModal(true)}>
+        <TouchableOpacity onPress={() => setShowModal(true)}>
           <MaterialCommunityIcons name="dots-vertical" size={25} color="#000" />
         </TouchableOpacity>
       </View>
@@ -133,7 +133,7 @@ const EditProfile = () => {
             />
           ) : (
             <Image
-              source={{uri: user?.avatar}}
+              source={{uri: user.avatar}}
               style={{width: 130, height: 130, borderRadius: 100}}
             />
           )}
@@ -151,6 +151,7 @@ const EditProfile = () => {
             email: user.email || '',
             phone_no: user.phone_no || '',
             address: user.address1 || '',
+            address2: user.address2 || '',
             city: user.city || '',
             zip_code: user.zipcode || '',
           }}
@@ -168,7 +169,7 @@ const EditProfile = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>First Name</Text>
                 <TextInput
-                  placeholder="Sonu"
+                  placeholder="Enter first name"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.fname}
@@ -182,7 +183,7 @@ const EditProfile = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Last Name</Text>
                 <TextInput
-                  placeholder="Kumar"
+                  placeholder="Enter last name"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.lname}
@@ -196,7 +197,7 @@ const EditProfile = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Company Name</Text>
                 <TextInput
-                  placeholder="eweb"
+                  placeholder="Enter company name"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.company_name}
@@ -210,7 +211,7 @@ const EditProfile = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Email Address</Text>
                 <TextInput
-                  placeholder="sonu123@gmail.com"
+                  placeholder="example@gmail.com"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.email}
@@ -224,7 +225,7 @@ const EditProfile = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Contact Number</Text>
                 <TextInput
-                  placeholder="9504425494"
+                  placeholder="Enter contact number"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.phone_no}
@@ -236,9 +237,9 @@ const EditProfile = () => {
                 )}
               </View>
               <View style={styles.textfield_wrapper}>
-                <Text style={styles.text}>Address</Text>
+                <Text style={styles.text}>Address1</Text>
                 <TextInput
-                  placeholder="Mattor, Sector-70, Mohali"
+                  placeholder="Enter address"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.address}
@@ -249,10 +250,25 @@ const EditProfile = () => {
                   <Text style={styles.errortext}>{errors.address}</Text>
                 )}
               </View>
+              {/* Address2 */}
+              <View style={styles.textfield_wrapper}>
+                <Text style={styles.text}>Address2</Text>
+                <TextInput
+                  placeholder="Enter address2"
+                  placeholderTextColor="#000"
+                  style={styles.inputfield}
+                  value={values.address2}
+                  onChangeText={handleChange('address2')}
+                  onBlur={handleBlur('address2')}
+                />
+                {touched.address2 && errors.address2 && (
+                  <Text style={styles.errortext}>{errors.address2}</Text>
+                )}
+              </View>
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>City</Text>
                 <TextInput
-                  placeholder="Mohali"
+                  placeholder="Enter city"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.city}
@@ -266,7 +282,7 @@ const EditProfile = () => {
               <View style={styles.textfield_wrapper}>
                 <Text style={styles.text}>Zip Code</Text>
                 <TextInput
-                  placeholder="140301"
+                  placeholder="Enter zipcode"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
                   value={values.zip_code}
@@ -286,7 +302,7 @@ const EditProfile = () => {
           )}
         </Formik>
       </View>
-      <Popup showModal={showModal} setShowModal={setShowModal}/>
+      <Popup showModal={showModal} setShowModal={setShowModal} />
     </ScrollView>
   );
 };
