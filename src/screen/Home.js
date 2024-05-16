@@ -67,7 +67,7 @@ const Home = () => {
             <Text style={styles.text}>Find Helper</Text>
           </TouchableOpacity>
         </View>
-        {/* MyOrders component */}
+      
         <View>
           <MyOrders />
         </View>
