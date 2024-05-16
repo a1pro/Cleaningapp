@@ -42,11 +42,11 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
 
-
   useEffect(() => {
     dispatch(getUserdata());
   }, [dispatch]);
 
+  //Upload image from local
   const selectOneFile = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -71,7 +71,7 @@ const EditProfile = () => {
       console.error('No token found');
       return;
     }
-  
+
     try {
       // Create a FormData object to send both data and the image file
       const formData = new FormData();
@@ -87,16 +87,16 @@ const EditProfile = () => {
       formData.append('avatar', {
         uri: singleFile.uri,
         name: singleFile.name,
-        type: 'image/jpeg', // Change this according to the file type
+        type: 'image/jpeg',
       });
-  
+
       const res = await axios.post(Base_url.generateUserUpdate, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: 'Bearer ' + token,
         },
       });
-  
+
       if (res.data.success === true) {
         Alert.alert(res.data.message);
         navigation.navigate('Home');

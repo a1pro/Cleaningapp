@@ -52,7 +52,7 @@ const Home = () => {
             style={{width: 80, height: 80, borderRadius: 100}}
           />
           <View style={{marginLeft: 10}}>
-            <Text style={[styles.h4, {color: '#25435F'}]}>{user.fname}</Text>
+            <Text style={[styles.h4, {color: '#25435F',textTransform:'capitalize'}]}>{user.fname}</Text>
             {/* <Text style={{color: '#25435F'}}>{user.lname}</Text> */}
           </View>
         </View>
