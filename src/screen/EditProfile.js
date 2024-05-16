@@ -7,7 +7,6 @@ import {
   TextInput,
   ImageBackground,
   Image,
-  StyleSheet,
   Alert,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,7 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getUserdata} from '../redux/UserdataSlice';
 import styles from '../styles/Styles';
 import axios from 'axios';
-import {Base_url} from '../Apiurl';
+import {Base_url, base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Popup from '../component/Popup';
 
@@ -47,6 +46,7 @@ const EditProfile = () => {
     dispatch(getUserdata());
   }, [dispatch]);
 
+  //Upload image from local
   const selectOneFile = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -56,9 +56,9 @@ const EditProfile = () => {
       console.log('singleFile', res[0]);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        alert('Canceled from single doc picker');
+        Alert.alert('Canceled from single doc picker');
       } else {
-        alert('Unknown Error: ' + JSON.stringify(err));
+        Alert.alert('Unknown Error: ' + JSON.stringify(err));
         throw err;
       }
     }
@@ -73,23 +73,27 @@ const EditProfile = () => {
     }
 
     try {
-      const res = await axios({
-        method: 'POST',
-        url: Base_url.generateUserUpdate,
+      // Create a FormData object to send both data and the image file
+      const formData = new FormData();
+      formData.append('fname', values.fname);
+      formData.append('lname', values.lname);
+      formData.append('company_name', values.company_name);
+      formData.append('email', values.email);
+      formData.append('phone_no', values.phone_no);
+      formData.append('address1', values.address);
+      formData.append('address2', values.address2);
+      formData.append('city', values.city);
+      formData.append('zipcode', values.zip_code);
+      formData.append('avatar', {
+        uri: singleFile.uri,
+        name: singleFile.name,
+        type: 'image/jpeg',
+      });
+
+      const res = await axios.post(Base_url.generateUserUpdate, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           Authorization: 'Bearer ' + token,
-        },
-        data: {
-          fname: values.fname,
-          lname: values.lname,
-          company_name: values.company_name,
-          email: values.email,
-          phone_no: values.phone_no,
-          address1: values.address,
-          address2: values.address2,
-          city: values.city,
-          zipcode: values.zip_code,
         },
       });
 
@@ -104,7 +108,6 @@ const EditProfile = () => {
       Alert.alert('Error', 'An error occurred while updating the profile.');
     }
   };
-
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ImageBackground
@@ -132,8 +135,9 @@ const EditProfile = () => {
               style={{width: 130, height: 130, borderRadius: 100}}
             />
           ) : (
+            // <Image source={require('../assets/user-dummy.png')} style={{width:130,height:130,borderRadius:100}}/>
             <Image
-              source={{uri: user.avatar}}
+              source={{uri:user.avatar}}
               style={{width: 130, height: 130, borderRadius: 100}}
             />
           )}

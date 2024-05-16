@@ -1,4 +1,4 @@
-const base_url= 'https://crmwebcleaning.a1professionals.net/api/v1/'
+export const base_url= 'https://crmwebcleaning.a1professionals.net/api/v1/'
 
 export const Base_url = {
     get_user_detail:`${base_url}get_user_detail`,

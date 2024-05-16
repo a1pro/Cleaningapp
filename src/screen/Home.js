@@ -24,6 +24,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(getUserdata());
   }, [dispatch]);
+  
   // get token from AsyncStorage
   const [token, setToken] = React.useState(null);
   useEffect(() => {
@@ -46,9 +47,12 @@ const Home = () => {
 
       <View style={style.profile_wrapper}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image source={require('../assets/profile-img.png')} />
+          <Image
+            source={{uri: user.avatar}}
+            style={{width: 80, height: 80, borderRadius: 100}}
+          />
           <View style={{marginLeft: 10}}>
-            <Text style={[styles.h4, {color: '#25435F'}]}>{user.fname}</Text>
+            <Text style={[styles.h4, {color: '#25435F',textTransform:'capitalize'}]}>{user.fname}</Text>
             {/* <Text style={{color: '#25435F'}}>{user.lname}</Text> */}
           </View>
         </View>

@@ -440,7 +440,7 @@ const BookingForm = () => {
                   )}
 
                   <Text
-                    style={[styles.h5, {color: '#000', marginHorizontal: 20}]}>
+                    style={[styles.h5, {color: '#000', marginHorizontal:10}]}>
                     Billing Address Same
                   </Text>
                 </View>
