@@ -2,25 +2,31 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Home from '../screen/Home';
 import Notification from '../screen/Notification';
 import BookingForm from '../component/BookingForm';
 import MyBooking from '../screen/MyBooking';
+import MyOrders from '../component/MyOrders';
 
 const Tab = createBottomTabNavigator();
 const BottomtabNavigation = () => {
   return (
     <Tab.Navigator
+      tabBarHideOnKeyboard={true}
       screenOptions={() => ({
-        tabBarActiveTintColor: '#f0f0f7',
+        tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: '#25435F',
+        tabBarLabelStyle:{
+          fontSize:13
+        },
         tabBarStyle: {
           backgroundColor: '#f0f0f7',
           borderTopWidth: 0,
           elevation: 0,
           paddingTop: 10,
           paddingBottom: 10,
-          height: 70,
+          height: 80,
         },
       })}>
       <Tab.Screen
@@ -32,11 +38,11 @@ const BottomtabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={Notification}
+        name="Myorders"
+        component={MyOrders}
         options={{
           headerShown: false,
-          tabBarIcon: () => <Icon name="settings" color="#25435F" size={30} />,
+          tabBarIcon: () => <MaterialIcons name="shopping-bag" color="#25435F" size={30} />,
         }}
       />
        <Tab.Screen

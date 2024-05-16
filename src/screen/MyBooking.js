@@ -8,15 +8,16 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import styles from '../styles/Styles';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import AllBooking from './mybookingpage/AllBooking';
 import Completed from './mybookingpage/Completed';
 import InProcess from './mybookingpage/InProcess';
 import Cancelpage from './mybookingpage/Cancelpage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserdata } from '../redux/UserdataSlice';
 
-const MyBooking = () => {
+const MyBooking = ({navigation}) => {
   const [selectTab, setSelectTab] = useState('All');
-
   // handleTab function
   const handleTab = (tab) => {
     setSelectTab(tab);
