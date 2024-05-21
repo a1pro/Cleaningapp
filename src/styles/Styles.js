@@ -177,6 +177,39 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 0,
+  },
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding:20,
+    width: '100%',
+    // height:500, 
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  icon_wrapper:{
+      width:50,
+      height:50,
+      borderRadius:100,
+      backgroundColor:'#fff',
+      alignItems:'center',
+      justifyContent:'center'
+  },
+  text_center:{
+    textAlign:'center'
   }
+  
 });
 export default styles;
