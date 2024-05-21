@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Base_url } from '../Apiurl';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -18,9 +18,10 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-const Login = ({navigation}) => {
+const Login = () => {
   const route= useRoute()
   const [showPassword, setShowPassword] = useState(false);
+  const navigation= useNavigation();
 const roles =route?.params?.role
 console.log('roles',roles)
   //Login Api

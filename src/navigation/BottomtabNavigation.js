@@ -8,6 +8,7 @@ import Notification from '../screen/Notification';
 import BookingForm from '../component/BookingForm';
 import MyBooking from '../screen/MyBooking';
 import MyOrders from '../component/MyOrders';
+import MyOrderPage from '../screen/MyOrderPage';
 
 const Tab = createBottomTabNavigator();
 const BottomtabNavigation = () => {
@@ -38,8 +39,8 @@ const BottomtabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Myorders"
-        component={MyOrders}
+        name="MyOrderPage"
+        component={MyOrderPage}
         options={{
           headerShown: false,
           tabBarIcon: () => <MaterialIcons name="shopping-bag" color="#25435F" size={30} />,
