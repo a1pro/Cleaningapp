@@ -34,10 +34,10 @@ const LoginOption = ({navigation}) => {
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={styles.btn1}
-            onPress={() => navigation.navigate('Login',{role:2})}>
+            onPress={() => navigation.navigate('Login',{role:1})}>
             <Text style={styles.btntext1}>Sign in as Services Provider</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn2} onPress={() => navigation.navigate('Login',{role:1})}>
+          <TouchableOpacity style={styles.btn2} onPress={() => navigation.navigate('Login',{role:2})}>
             <Text style={styles.btntext2}>Sign in as Customer</Text>
           </TouchableOpacity>
         </View>

@@ -4,10 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Home from '../screen/Home';
-import Notification from '../screen/Notification';
 import BookingForm from '../component/BookingForm';
 import MyBooking from '../screen/MyBooking';
-import MyOrders from '../component/MyOrders';
 import MyOrderPage from '../screen/MyOrderPage';
 
 const Tab = createBottomTabNavigator();
