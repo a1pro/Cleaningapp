@@ -5,8 +5,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect} from 'react';
 import {getUserBooking} from '../../redux/MybookingSlice';
+import moment from 'moment';
 
 export const RenderBooking = ({item}) => {
+  const bookingDate = moment(item.booking_date).format('DD MMM YYYY')
   return (
     <View style={{marginTop: 30}}>
       <View style={styles.booking_heading}>
@@ -46,7 +48,7 @@ export const RenderBooking = ({item}) => {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MaterialIcons name="date-range" size={25} color={'#25435F'} />
             <Text style={[styles.h6, {color: '#000', paddingLeft: 10}]}>
-              {item.booking_date}
+              {bookingDate}
             </Text>
           </View>
           <Text

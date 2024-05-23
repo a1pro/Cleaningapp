@@ -46,6 +46,7 @@ const OngoingOrder = () => {
       if (res.status === 200 && res.data.success === true) {
         setLoading(false);
         setCleanerBooking(res.data.data);
+        console.log("data",res.data.data);
       }
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/AntDesign';
@@ -6,18 +6,40 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Home from '../screen/Home';
 import BookingForm from '../component/BookingForm';
 import MyBooking from '../screen/MyBooking';
-import MyOrderPage from '../screen/MyOrderPage';
+import MyOrderPage from '../cleaner/MyOrderPage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
+
 const BottomtabNavigation = () => {
+  const [roles, setRoles] = useState(null);
+
+  //Cehck Role and show screen accroding role
+  useEffect(() => {
+    const checkRoles = async () => {
+      try {
+        const storedRoles = await AsyncStorage.getItem('role');
+        if (storedRoles !== null) {
+          setRoles(storedRoles);
+          console.log('roles124', roles);
+        } else {
+          console.log('No roles found');
+        }
+      } catch (error) {
+        console.error('Failed to load roles', error);
+      }
+    };
+    checkRoles();
+  }, []);
+
   return (
     <Tab.Navigator
       tabBarHideOnKeyboard={true}
       screenOptions={() => ({
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: '#25435F',
-        tabBarLabelStyle:{
-          fontSize:13
+        tabBarLabelStyle: {
+          fontSize: 13,
         },
         tabBarStyle: {
           backgroundColor: '#f0f0f7',
@@ -36,15 +58,20 @@ const BottomtabNavigation = () => {
           tabBarIcon: () => <Icon name="home" color="#25435F" size={30} />,
         }}
       />
+      {roles === '1' && (
+        <Tab.Screen
+          name="MyOrderPage"
+          component={MyOrderPage}
+          options={{
+            headerShown: false,
+            tabBarIcon: () => (
+              <MaterialIcons name="shopping-bag" color="#25435F" size={30} />
+            ),
+          }}
+        />
+      )}
+
       <Tab.Screen
-        name="MyOrderPage"
-        component={MyOrderPage}
-        options={{
-          headerShown: false,
-          tabBarIcon: () => <MaterialIcons name="shopping-bag" color="#25435F" size={30} />,
-        }}
-      />
-       <Tab.Screen
         name="Bookingform"
         component={BookingForm}
         options={{
@@ -52,12 +79,14 @@ const BottomtabNavigation = () => {
           tabBarIcon: () => <Icons name="form" color="#25435F" size={30} />,
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="MyBooking"
         component={MyBooking}
         options={{
           headerShown: false,
-          tabBarIcon: () => <Icon name="today-sharp" color="#25435F" size={30} />,
+          tabBarIcon: () => (
+            <Icon name="today-sharp" color="#25435F" size={30} />
+          ),
         }}
       />
     </Tab.Navigator>

@@ -11,7 +11,10 @@ const Popup = ({showModal, setShowModal}) => {
   const handleLogout = () => {
     setShowModal(false);
     AsyncStorage.removeItem('token');
-    navigation.navigate('Login');
+    const token = AsyncStorage.getItem('token')
+    console.log("token",token);
+    console.log("Logout Successfully")
+    navigation.navigate('LoginOption');
   };
   return (
     <Modal isVisible={showModal}>

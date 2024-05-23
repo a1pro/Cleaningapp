@@ -3,8 +3,10 @@ import styles from '../../styles/Styles';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 const RenderBooking = ({item}) => {
+  const bookingDate = moment(item.booking_date).format('DD MMM YYYY')
   return (
     <>
       {item.cleaning_status === 'Cancelled' && (
@@ -46,7 +48,7 @@ const RenderBooking = ({item}) => {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <MaterialIcons name="date-range" size={25} color={'#25435F'} />
               <Text style={[styles.h6, {color: '#000', paddingLeft: 10}]}>
-                {item.booking_date}
+                {bookingDate}
               </Text>
             </View>
             <Text
