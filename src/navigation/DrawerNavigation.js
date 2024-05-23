@@ -1,7 +1,6 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React from 'react';
 import Notification from '../screen/Notification';
-import CarNumberPlate from '../screen/CarNumberPlate';
 // import Home from '../screen/Home';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 

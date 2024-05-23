@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, Text, TextInput, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+  RefreshControl,
+} from 'react-native';
 import styles from '../styles/Styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Formik} from 'formik';
@@ -24,6 +32,16 @@ const Login = () => {
   const navigation = useNavigation();
   const roles = route?.params?.role;
   console.log('roles', roles);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+// Refresh Page
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   //Login Api
   const handleSubmit = async values => {
     try {
@@ -39,8 +57,12 @@ const Login = () => {
       });
       if (res.data.success === true) {
         const key = res.data.data.token;
+        const storeroles = res.data.data.role;
         // Store the token in AsyncStorage
         await AsyncStorage.setItem('token', key);
+
+        // Store the role in AsyncStorage
+        await AsyncStorage.setItem('role', String(storeroles));
         Alert.alert(res.data.message);
         navigation.navigate('Home');
       } else {
@@ -70,6 +92,9 @@ const Login = () => {
       <View style={{marginTop: 1}}>
         <Image source={require('../assets/circle1.png')} />
       </View>
+      <ScrollView contentContainerStyle={styles.container}   refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
       <Formik
         initialValues={{email: '', password: ''}}
         validationSchema={validationSchema}
@@ -90,9 +115,9 @@ const Login = () => {
                 justifyContent: 'center',
                 margin: 10,
               }}>
-                <Text style={[styles.h3, {color: '#000',fontWeight:'600'}]}>
-                    Sign In as {roles === 1 ? <>Cleaner</>:<>Customer</>}
-                  </Text>
+              <Text style={[styles.h3, {color: '#000', fontWeight: '600'}]}>
+                Sign In as {roles === 1 ? <>Cleaner</> : <>Customer</>}
+              </Text>
               <View style={[styles.textfield_wrapper, {marginTop: 30}]}>
                 <TextInput
                   placeholder="Email"
@@ -146,6 +171,7 @@ const Login = () => {
           </View>
         )}
       </Formik>
+      </ScrollView>
     </>
   );
 };

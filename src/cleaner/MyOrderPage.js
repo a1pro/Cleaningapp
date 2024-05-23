@@ -8,8 +8,8 @@ import {
   import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
   import styles from '../styles/Styles';
   import { useState} from 'react';
-import OngoingOrder from './OngoingOrder';
-import CompletedOrder from './CompletedOrder';
+  import CompletedOrder from '../cleaner/CompletedOrder';
+import OngoingOrder from '../cleaner/OngoingOrder';
 
   
   const MyOrderPage = ({navigation}) => {
