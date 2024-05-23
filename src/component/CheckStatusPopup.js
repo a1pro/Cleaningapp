@@ -3,8 +3,15 @@ import {Image, Modal, Text, TouchableOpacity, View} from 'react-native';
 import styles from '../styles/Styles';
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import moment from 'moment';
 
-const CheckStatusPopup = ({modalVisible, setModalVisible}) => {
+const CheckStatusPopup = ({
+  modalVisible,
+  setModalVisible,
+  statusId,
+  cleanerDataById,
+}) => {
+  const bookingDate = moment(cleanerDataById.booking_date).format(' Do MMM YYYY');
   return (
     <View>
       <Modal
@@ -27,39 +34,58 @@ const CheckStatusPopup = ({modalVisible, setModalVisible}) => {
             </View>
             {/* heading of profile */}
             <View style={{marginTop: 30}}>
-              <Text style={styles.h6}>Cloth and bedsheet ironing</Text>
+              <Text style={styles.h6}>{cleanerDataById.job_description}</Text>
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   marginTop: 10,
                 }}>
-                <Image source={require('../assets/gaviid.png')} />
+                {cleanerDataById.logo ? (
+                  <Image
+                    source={{uri: cleanerDataById.logo}}
+                    style={styles.profileImage}
+                  />
+                ) : (
+                  <Image
+                    source={require('../assets/user-dummy.png')}
+                    style={styles.profileImage}
+                  />
+                )}
                 <Text style={[styles.text, {paddingLeft: 8, marginTop: 0}]}>
-                  Shail Rathore
+                 {cleanerDataById.user_name}
                 </Text>
               </View>
             </View>
             {/* Details section */}
-            <View style={{paddingTop:30}}>
+            <View style={{paddingTop: 30}}>
               <Text style={styles.h6}>Details</Text>
 
-              <View style={{flexDirection: 'row', alignItems: 'center',marginTop:10}}>
-                <View style={[styles.whitebox,{alignItems:'center'}]}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}>
+                <View style={[styles.whitebox, {alignItems: 'center'}]}>
                   <View style={styles.icon_wrapper}>
                     <MaterialIcons name="access-time" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>2h 30 min</Text>
+                    <Text style={styles.text}>{cleanerDataById.duration}</Text>
                     <Text style={styles.text_center}>Est time</Text>
                   </View>
                 </View>
-                <View style={[styles.whitebox, {marginLeft: 15,alignItems:'center'}]}>
+                <View
+                  style={[
+                    styles.whitebox,
+                    {marginLeft: 15, alignItems: 'center'},
+                  ]}>
                   <View style={styles.icon_wrapper}>
                     <MaterialIcons name="location-on" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>Chandigrah</Text>
+                    <Text style={styles.text}>{cleanerDataById.city}</Text>
                     <Text style={styles.text_center}>Location</Text>
                   </View>
                 </View>
@@ -70,21 +96,25 @@ const CheckStatusPopup = ({modalVisible, setModalVisible}) => {
                   alignItems: 'center',
                   marginTop: 20,
                 }}>
-                <View style={[styles.whitebox,{alignItems:'center'}]}>
+                <View style={[styles.whitebox, {alignItems: 'center'}]}>
                   <View style={styles.icon_wrapper}>
                     <MaterialIcons name="date-range" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>21 May2024</Text>
+                    <Text style={styles.text}>{bookingDate}</Text>
                     <Text style={styles.text_center}>Date</Text>
                   </View>
                 </View>
-                <View style={[styles.whitebox, {marginLeft: 15,alignItems:'center'}]}>
+                <View
+                  style={[
+                    styles.whitebox,
+                    {marginLeft: 15, alignItems: 'center'},
+                  ]}>
                   <View style={styles.icon_wrapper}>
                     <FontAwesome name="dollar" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>$ 80 per hour</Text>
+                    <Text style={styles.text}>$ {cleanerDataById.total_price_order} Per hour</Text>
                     <Text style={styles.text_center}>Price</Text>
                   </View>
                 </View>

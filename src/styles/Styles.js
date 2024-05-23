@@ -208,7 +208,13 @@ const styles = StyleSheet.create({
       justifyContent:'center'
   },
   text_center:{
-    textAlign:'center'
+    textAlign:'center',
+    paddingTop:8
+  },
+  profileImage:{
+    width:70,
+    height:70,
+    borderRadius:100
   }
   
 });

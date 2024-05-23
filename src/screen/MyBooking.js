@@ -68,15 +68,15 @@ const MyBooking = ({navigation}) => {
           <Text style={[styles.activetabttext,{color:selectTab==="Completed"?"#fff":'#898585'}]}>Completed</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleTab('In Process')}
+          onPress={() => handleTab('In Progress')}
           style={[
             styles.activetabbtn,
             {
               backgroundColor:
-                selectTab === 'In Process' ? '#25435F' : '#F4F3F3',
+                selectTab === 'In Progress' ? '#25435F' : '#F4F3F3',
             },
           ]}>
-          <Text style={[styles.activetabttext,{color:selectTab==="In Process"?"#fff":'#898585'}]}>In Process</Text>
+          <Text style={[styles.activetabttext,{color:selectTab==="In Progress"?"#fff":'#898585'}]}>In Progress</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleTab('Cancel')}
@@ -93,7 +93,7 @@ const MyBooking = ({navigation}) => {
       {selectTab ==="Completed" &&(
         <Completed/>
       )}
-      {selectTab ==="In Process" &&(  
+      {selectTab ==="In Progress" &&(  
         <InProcess/>
         )}
         {selectTab ==="Cancel" &&(
