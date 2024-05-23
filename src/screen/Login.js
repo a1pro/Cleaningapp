@@ -90,20 +90,9 @@ const Login = () => {
                 justifyContent: 'center',
                 margin: 10,
               }}>
-              {roles === 1 ? (
-                <>
-                  <Text style={[styles.h3, {color: '#000',fontWeight:'600'}]}>
-                    Sign In as Cleaner
+                <Text style={[styles.h3, {color: '#000',fontWeight:'600'}]}>
+                    Sign In as {roles === 1 ? <>Cleaner</>:<>Customer</>}
                   </Text>
-                </>
-              ) : (
-                <>
-                  <Text style={[styles.h3, {color: '#000',fontWeight:'600'}]}>
-                    Sign In as Customer
-                  </Text>
-                </>
-              )}
-
               <View style={[styles.textfield_wrapper, {marginTop: 30}]}>
                 <TextInput
                   placeholder="Email"

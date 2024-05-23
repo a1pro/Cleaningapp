@@ -6,4 +6,6 @@ export const Base_url = {
     booking_cleaner:`${base_url}booking/booking_cleaner`,
     generateUserUpdate:`${base_url}generateUserUpdate`,
     getformvalues:`${base_url}booking/getformvalues`,
+    userbooking:`${base_url}booking/get_user_bookings`,
+    cleanerbooking:`${base_url}booking/get_cleaner_bookings`
 }

@@ -1,12 +1,12 @@
-import {FlatList, View, Image, Text} from 'react-native';
+import {FlatList, View, Image, Text, ActivityIndicator} from 'react-native';
 import styles from '../../styles/Styles';
-import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
-import { allbooking } from './Bookingdata';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch, useSelector} from 'react-redux';
+import {useEffect} from 'react';
+import {getUserBooking} from '../../redux/MybookingSlice';
 
-
-
-const RenderBooking = ({item}) => {
+export const RenderBooking = ({item}) => {
   return (
     <View style={{marginTop: 30}}>
       <View style={styles.booking_heading}>
@@ -16,18 +16,24 @@ const RenderBooking = ({item}) => {
             alignItems: 'center',
             marginBottom: 5,
           }}>
-          <Image source={item.image} />
-          <Text style={[styles.h6, {paddingLeft: 15}]}>{item.name}</Text>
+          {item.logo?<>
+            <Image source={{uri: item.logo}} style={styles.profileImage} />
+          </>:<>
+          <Image source={require('../../assets/user-dummy.png')} style={styles.profileImage} />
+          </>}
+          <Text style={[styles.h6, {paddingLeft: 15}]}>
+            {item.cleaner_name}
+          </Text>
         </View>
         <Text style={{color: '#25435F', fontSize: 16, fontWeight: 'bold'}}>
-          {item.srs}
+          {item.booking_id}
         </Text>
       </View>
       <View style={styles.whitebox}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Ionicons name="home" size={25} color={'#25435F'} />
           <Text style={[styles.h6, {color: '#000', paddingLeft: 10}]}>
-            {item.service}
+            {item?.job_description ? item.job_description : 'Cleaner Services'}
           </Text>
         </View>
         <View
@@ -40,34 +46,55 @@ const RenderBooking = ({item}) => {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MaterialIcons name="date-range" size={25} color={'#25435F'} />
             <Text style={[styles.h6, {color: '#000', paddingLeft: 10}]}>
-              {item.date}
+              {item.booking_date}
             </Text>
           </View>
           <Text
             style={[
               styles.h6,
-              item.status === 'In Process'
-                ? {color: '#FFC003'}
-                : item.status === 'Completed'
-                ? {color: '#008B06'}
-                : {color: '#FE0000'},
+              {
+                color:
+                  item.cleaning_status === 'In Progress'
+                    ? '#FFC003'
+                    : item.cleaning_status === 'Completed'
+                    ? '#008B06'
+                    : '#FE0000',
+              },
             ]}>
-            {item.status}
+            {item.cleaning_status}
           </Text>
         </View>
       </View>
     </View>
   );
 };
+
 const AllBooking = () => {
+  // Get user booking data from redux
+  const userbooking = useSelector(state => state.userbookingdata.userbooking);
+  const loading = useSelector(state => state.userbookingdata.loading);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserBooking());
+  }, []);
+
   return (
-    <View style={[styles.container,{paddingBottom:20}]}>
-      <FlatList
-        data={allbooking}
-        renderItem={RenderBooking}
-        keyExtractor={item => item.id.toString()}
-      />
+    <View style={[styles.container, {paddingBottom: 20}]}>
+      {loading ? (
+       <View style={{justifyContent:'center',alignItems:'center',height:500}}>
+         <ActivityIndicator size="70" color="#25435F"/>
+       </View>
+      ) : (
+        <FlatList
+          data={userbooking}
+          renderItem={RenderBooking}
+          // keyExtractor={item => item.id.toString()}
+        />
+      )}
     </View>
   );
 };
+
 export default AllBooking;
