@@ -110,6 +110,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-vector-icons')
    implementation ("com.facebook.react:react-native:+")
+//    implementation project(':react-native-fingerprint-scanner')
     
 
     if (hermesEnabled.toBoolean()) {

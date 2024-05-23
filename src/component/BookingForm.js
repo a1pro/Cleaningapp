@@ -17,13 +17,15 @@ import styles from '../styles/Styles';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
-import { getUserdata } from '../redux/UserdataSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import {getUserdata} from '../redux/UserdataSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import Recaptcha from 'react-native-recaptcha-that-works';
+
 
 const validationSchema = yup.object().shape({
   required_cleaners: yup.string().required('Cleaners are required'),
@@ -50,8 +52,10 @@ const BookingForm = () => {
   const [timeSlot, setTimeSlot] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [checked, setChecked] = useState(false);
+  const recaptcha = useRef();
+  const [recaptchaToken, setRecaptchaToken] = useState('');
 
-  const serviceAddress = useSelector((state)=>state.user.user);
+  const serviceAddress = useSelector(state => state.user.user);
   const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
@@ -74,6 +78,11 @@ const BookingForm = () => {
     let year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  // handleCaptcha
+  const onVerify = token => {
+    console.log('success!', token);
+}
 
   // getbooking form value
   const getbookingvalue = async () => {
@@ -146,11 +155,11 @@ const BookingForm = () => {
       console.log(error);
     }
   };
- 
+
   //Get userAddress from redux store
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getUserdata);
-  },[])
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -183,10 +192,10 @@ const BookingForm = () => {
             booking_type: '',
             duration: '',
             start_time: '',
-            address1:serviceAddress.address1 || '',
-            address2: serviceAddress.address2 ||'',
-            servicecity:serviceAddress.city ||'',
-            servicepostcode:serviceAddress.zipcode || '',
+            address1: serviceAddress.address1 || '',
+            address2: serviceAddress.address2 || '',
+            servicecity: serviceAddress.city || '',
+            servicepostcode: serviceAddress.zipcode || '',
             billingaddress1: '',
             billingaddress2: '',
             billingcity: '',
@@ -440,7 +449,7 @@ const BookingForm = () => {
                   )}
 
                   <Text
-                    style={[styles.h5, {color: '#000', marginHorizontal:10}]}>
+                    style={[styles.h5, {color: '#000', marginHorizontal: 10}]}>
                     Billing Address Same
                   </Text>
                 </View>
@@ -507,6 +516,13 @@ const BookingForm = () => {
                   )}
                 </View>
               </View>
+
+              {/* <Recaptcha
+                ref={recaptcha}
+                siteKey="6LeyU-MpAAAAAG2DiKeQz0rOmVgeLwhbqBdoW2Qr"
+                onVerify={onVerify}
+                // size="invisible"
+            /> */}
 
               <TouchableOpacity
                 style={[styles.btn1, {marginTop: 20}]}

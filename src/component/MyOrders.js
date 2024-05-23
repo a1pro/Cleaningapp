@@ -1,7 +1,9 @@
 import {Text, TouchableOpacity, View} from 'react-native';
 import styles from '../styles/Styles';
+import { useNavigation } from '@react-navigation/native';
 
-const MyOrders = ({navigation}) => {
+const MyOrders = () => {
+  const navigation = useNavigation();
   return (
     <View style={{marginTop:20}}>
       <TouchableOpacity onPress={()=>navigation.navigate('MyOrderPage')}>

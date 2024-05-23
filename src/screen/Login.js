@@ -7,8 +7,8 @@ import * as yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Base_url } from '../Apiurl';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {Base_url} from '../Apiurl';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -19,53 +19,52 @@ const validationSchema = yup.object().shape({
 });
 
 const Login = () => {
-  const route= useRoute()
+  const route = useRoute();
   const [showPassword, setShowPassword] = useState(false);
-  const navigation= useNavigation();
-const roles =route?.params?.role
-console.log('roles',roles)
+  const navigation = useNavigation();
+  const roles = route?.params?.role;
+  console.log('roles', roles);
   //Login Api
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       console.log('values', values);
-    const res = await axios({
-      method: 'post',
-      url: Base_url.login,
-      data:{
-        email: values.email,
-        password: values.password,
-        role:roles
-      }
-    })
-    if(res.data.success=== true){
-      const key = res.data.data.token;
+      const res = await axios({
+        method: 'post',
+        url: Base_url.login,
+        data: {
+          email: values.email,
+          password: values.password,
+          role: roles,
+        },
+      });
+      if (res.data.success === true) {
+        const key = res.data.data.token;
         // Store the token in AsyncStorage
         await AsyncStorage.setItem('token', key);
-      Alert.alert(res.data.message)
-      navigation.navigate('Home');
-    }
-    else{
-      Alert.alert("Invalid credentials");
-    }
+        Alert.alert(res.data.message);
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Invalid credentials');
+      }
     } catch (error) {
-      Alert.alert("Invalid credentials")
-        console.log(error);
+      Alert.alert('Invalid credentials');
+      console.log(error);
     }
   };
 
-    // get token from AsyncStorage
-    const [token, setToken] = useState(null);
-    useEffect(() => {
-      AsyncStorage.getItem('token').then(value => {
-        if (value !== null) {
-          setToken(value);
-          console.log('token', value);
-        }
-      });
-    }, []);
-    if (token) {
-      navigation.navigate('Home');
-    }
+  // get token from AsyncStorage
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    AsyncStorage.getItem('token').then(value => {
+      if (value !== null) {
+        setToken(value);
+        console.log('token', value);
+      }
+    });
+  }, []);
+  if (token) {
+    navigation.navigate('Home');
+  }
   return (
     <>
       <View style={{marginTop: 1}}>
@@ -85,8 +84,26 @@ console.log('roles',roles)
         }) => (
           <View style={styles.container}>
             <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center',margin:10}}>
-              <Text style={[styles.h3, {color: '#000'}]}>Sign In</Text>
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: 10,
+              }}>
+              {roles === 1 ? (
+                <>
+                  <Text style={[styles.h3, {color: '#000',fontWeight:'600'}]}>
+                    Sign In as Cleaner
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={[styles.h3, {color: '#000',fontWeight:'600'}]}>
+                    Sign In as Customer
+                  </Text>
+                </>
+              )}
+
               <View style={[styles.textfield_wrapper, {marginTop: 30}]}>
                 <TextInput
                   placeholder="Email"

@@ -6,6 +6,7 @@ import BottomtabNavigation from './BottomtabNavigation';
 import SplashScreen from '../screen/SplashScreen';
 import LoginOption from '../screen/LoginOption';
 import EditProfile from '../screen/EditProfile';
+import MyOrderPage from '../screen/MyOrderPage';
 
 const Stack = createStackNavigator();
 
