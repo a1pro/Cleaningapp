@@ -17,8 +17,8 @@ const MyOrders = () => {
   // Cleaner Orders end
 
   // User Orders Data
-  const userOngoing_data = useSelector(state=>state.userbookingdata.userbooking.ongoing_count);
-  const userCompleted_data = useSelector(state=>state.userbookingdata.userbooking.completed_count);
+  const userOngoing_data = useSelector(state=>state.userbookingdata.userbooking?.ongoing_count);
+  const userCompleted_data = useSelector(state=>state.userbookingdata.userbooking?.completed_count);
 
 
 
