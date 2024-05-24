@@ -1,16 +1,19 @@
-import {FlatList, View, Image, Text, ActivityIndicator} from 'react-native';
+import {FlatList, View, Image, Text, ActivityIndicator, ScrollView,RefreshControl} from 'react-native';
 import styles from '../../styles/Styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getUserBooking} from '../../redux/MybookingSlice';
 import moment from 'moment';
 
-export const RenderBooking = ({item}) => {
-  const bookingDate = moment(item.booking_date).format('DD MMM YYYY')
+ const RenderBooking = ({item}) => {
+  const bookingDate = moment(item.booking_date).format('DD MMM YYYY');
   return (
     <View style={{marginTop: 30}}>
+      {/* {item.cleaning_status === "In Progress" && (
+        <Text>{item.cleaning_status}</Text>
+      )} */}
       <View style={styles.booking_heading}>
         <View
           style={{
@@ -18,11 +21,18 @@ export const RenderBooking = ({item}) => {
             alignItems: 'center',
             marginBottom: 5,
           }}>
-          {item.logo?<>
-            <Image source={{uri: item.logo}} style={styles.profileImage} />
-          </>:<>
-          <Image source={require('../../assets/user-dummy.png')} style={styles.profileImage} />
-          </>}
+          {item.logo ? (
+            <>
+              <Image source={{uri: item.logo}} style={styles.profileImage} />
+            </>
+          ) : (
+            <>
+              <Image
+                source={require('../../assets/user-dummy.png')}
+                style={styles.profileImage}
+              />
+            </>
+          )}
           <Text style={[styles.h6, {paddingLeft: 15}]}>
             {item.cleaner_name}
           </Text>
@@ -73,29 +83,48 @@ export const RenderBooking = ({item}) => {
 
 const AllBooking = () => {
   // Get user booking data from redux
-  const userbooking = useSelector(state => state.userbookingdata.userbooking);
+  const userbooking = useSelector(state => state.userbookingdata.userbooking.bookingdata);
   const loading = useSelector(state => state.userbookingdata.loading);
+  const [refreshing, setRefreshing] =useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUserBooking());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <View style={[styles.container, {paddingBottom: 20}]}>
-      {loading ? (
-       <View style={{justifyContent:'center',alignItems:'center',height:500}}>
-         <ActivityIndicator size="70" color="#25435F"/>
-       </View>
-      ) : (
-        <FlatList
-          data={userbooking}
-          renderItem={RenderBooking}
-          // keyExtractor={item => item.id.toString()}
-        />
-      )}
-    </View>
+    <ScrollView
+      contentContainerStyle={styles.scrollView}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <View style={[styles.container, {paddingBottom: 20}]}>
+        {loading ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 500,
+            }}>
+            <ActivityIndicator size="70" color="#25435F" />
+          </View>
+        ) : (
+          <FlatList
+            data={userbooking}
+            renderItem={RenderBooking}
+            // keyExtractor={item => item.id.toString()}
+          />
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

@@ -73,7 +73,7 @@ const RenderBooking = ({item}) => {
   );
 };
 const completed = () => {
-  const userbooking = useSelector(state => state.userbookingdata.userbooking);
+  const userbooking = useSelector(state => state.userbookingdata.userbooking.bookingdata);
   return (
     <View style={[styles.container, {paddingBottom: 20}]}>
       <FlatList

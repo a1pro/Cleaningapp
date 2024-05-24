@@ -46,9 +46,9 @@ const Home = () => {
       }
     });
   }, []);
-  if (!token) {
-    navigation.navigate('Login');
-  }
+  // if (!token) {
+  //   navigation.navigate('Login');
+  // }
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
