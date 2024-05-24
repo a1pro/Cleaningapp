@@ -23,7 +23,7 @@ const MyBooking = ({navigation}) => {
     setSelectTab(tab);
   };
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <>
       <ImageBackground
         source={require('../assets/circle1.png')}
         resizeMode="cover"
@@ -99,7 +99,7 @@ const MyBooking = ({navigation}) => {
         {selectTab ==="Cancel" &&(
           <Cancelpage/>
           )}
-    </ScrollView>
+    </>
   );
 };
 export default MyBooking;
