@@ -6,6 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import styles from '../styles/Styles';
@@ -16,11 +17,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserdata} from '../redux/UserdataSlice';
 
+
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
-
+  const [refreshing, setRefreshing] = React.useState(false);
+  // Refresh Page
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
 
   useEffect(() => {
@@ -41,7 +50,9 @@ const Home = () => {
     navigation.navigate('Login');
   }
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView contentContainerStyle={styles.scrollContainer} refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <ImageBackground
         source={require('../assets/circle1.png')}
         resizeMode="cover"

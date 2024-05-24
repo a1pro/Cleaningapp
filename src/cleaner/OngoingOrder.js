@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useDebugValue, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -13,6 +13,8 @@ import CheckStatusPopup from '../component/CheckStatusPopup';
 import axios from 'axios';
 import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { getcleanerorder } from '../redux/CleanerOrderSlice';
 
 const OngoingOrder = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,6 +22,11 @@ const OngoingOrder = () => {
   const [statusId, setStatusId] = useState('');
   const [cleanerDataById, setCleanerDataById] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const ongoing_data = useSelector(
+    state => state.cleanerorder.cleanerOrderdata.ongoing_data,
+  );
 
   //handleCheckStatus Modal
   const handleCheckStatus = (id, item) => {
@@ -29,33 +36,34 @@ const OngoingOrder = () => {
   };
 
   // Get CleanerBooking APi Data
-  const getcleanerbooking = async () => {
-    setLoading(true);
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert('Invalid token');
-        return;
-      }
-      const res = await axios.get(Base_url.cleanerbooking, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (res.status === 200 && res.data.success === true) {
-        setLoading(false);
-        setCleanerBooking(res.data.data);
-        console.log("data",res.data.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getcleanerbooking = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (!token) {
+  //       Alert.alert('Invalid token');
+  //       return;
+  //     }
+  //     const res = await axios.get(Base_url.cleanerbooking, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     if (res.status === 200 && res.data.success === true) {
+  //       setLoading(false);
+  //       setCleanerBooking(res.data.data);
+  //       console.log("data",res.data.data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getcleanerbooking();
-  }, []);
+//get cleaner order details
+useEffect(() => {
+  dispatch(getcleanerorder());
+}, [dispatch]);
 
   const renderCleanerOrder = ({item}) => {
     return (
@@ -140,7 +148,7 @@ const OngoingOrder = () => {
         </View>
       ) : (
         <FlatList
-          data={cleanerBooking}
+          data={ongoing_data}
           renderItem={renderCleanerOrder}
           keyExtractor={item => item.id.toString()}
         />

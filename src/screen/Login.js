@@ -34,7 +34,7 @@ const Login = () => {
   console.log('roles', roles);
   const [refreshing, setRefreshing] = React.useState(false);
 
-// Refresh Page
+  // Refresh Page
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -92,85 +92,87 @@ const Login = () => {
       <View style={{marginTop: 1}}>
         <Image source={require('../assets/circle1.png')} />
       </View>
-      <ScrollView contentContainerStyle={styles.container}   refreshControl={
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-      <Formik
-        initialValues={{email: '', password: ''}}
-        validationSchema={validationSchema}
-        onSubmit={values => handleSubmit(values)}>
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <View style={styles.container}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: 10,
-              }}>
-              <Text style={[styles.h3, {color: '#000', fontWeight: '600'}]}>
-                Sign In as {roles === 1 ? <>Cleaner</> : <>Customer</>}
-              </Text>
-              <View style={[styles.textfield_wrapper, {marginTop: 30}]}>
-                <TextInput
-                  placeholder="Email"
-                  style={styles.textfield}
-                  placeholderTextColor="#000"
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.errortext}>{errors.email}</Text>
-                )}
-              </View>
-              <View style={styles.textfield_wrapper}>
-                <View
-                  style={[
-                    styles.textfield,
-                    {flexDirection: 'row', alignItems: 'center'},
-                  ]}>
+        <Formik
+          initialValues={{email: '', password: ''}}
+          validationSchema={validationSchema}
+          onSubmit={values => handleSubmit(values)}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={styles.container}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: 10,
+                }}>
+                <Text style={[styles.h3, {color: '#000', fontWeight: '600'}]}>
+                  Sign In as {roles === 1 ? <>Cleaner</> : <>Customer</>}
+                </Text>
+                <View style={[styles.textfield_wrapper, {marginTop: 30}]}>
                   <TextInput
-                    placeholder="password"
-                    secureTextEntry={!showPassword}
+                    placeholder="Email"
+                    style={styles.textfield}
                     placeholderTextColor="#000"
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                  />
+                  {touched.email && errors.email && (
+                    <Text style={styles.errortext}>{errors.email}</Text>
+                  )}
+                </View>
+                <View style={styles.textfield_wrapper}>
+                  <View
                     style={[
                       styles.textfield,
-                      {flex: 1, borderWidth: 0, paddingLeft: 0, marginTop: 0},
-                    ]}
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={{marginRight: 10}}>
-                    <Icon
-                      name={showPassword ? 'visibility' : 'visibility-off'}
-                      size={30}
+                      {flexDirection: 'row', alignItems: 'center'},
+                    ]}>
+                    <TextInput
+                      placeholder="password"
+                      secureTextEntry={!showPassword}
+                      placeholderTextColor="#000"
+                      style={[
+                        styles.textfield,
+                        {flex: 1, borderWidth: 0, paddingLeft: 0, marginTop: 0},
+                      ]}
+                      onChangeText={handleChange('password')}
+                      onBlur={handleBlur('password')}
+                      value={values.password}
                     />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                      style={{marginRight: 10}}>
+                      <Icon
+                        name={showPassword ? 'visibility' : 'visibility-off'}
+                        size={30}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {touched.password && errors.password && (
+                    <Text style={styles.errortext}>{errors.password}</Text>
+                  )}
                 </View>
-                {touched.password && errors.password && (
-                  <Text style={styles.errortext}>{errors.password}</Text>
-                )}
+                <TouchableOpacity
+                  style={[styles.btn1, {marginTop: 20}]}
+                  onPress={handleSubmit}>
+                  <Text style={styles.btntext1}>Login</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={[styles.btn1, {marginTop: 20}]}
-                onPress={handleSubmit}>
-                <Text style={styles.btntext1}>Login</Text>
-              </TouchableOpacity>
             </View>
-          </View>
-        )}
-      </Formik>
+          )}
+        </Formik>
       </ScrollView>
     </>
   );

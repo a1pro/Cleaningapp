@@ -6,7 +6,7 @@ import BottomtabNavigation from './BottomtabNavigation';
 import SplashScreen from '../screen/SplashScreen';
 import LoginOption from '../screen/LoginOption';
 import EditProfile from '../screen/EditProfile';
-import MyOrderPage from '../cleaner/MyOrderPage';
+// import MyOrderPage from '../cleaner/MyOrderPage';
 
 const Stack = createStackNavigator();
 
@@ -33,11 +33,11 @@ const StackNavigation = () => {
         component={EditProfile}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="CarNumberPlate"
         component={DrawerNavigation}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen name="Home" component={BottomtabNavigation} options={{headerShown:false}}/>
      
     </Stack.Navigator>

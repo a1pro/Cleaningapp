@@ -84,12 +84,15 @@ const EditProfile = () => {
       formData.append('address2', values.address2);
       formData.append('city', values.city);
       formData.append('zipcode', values.zip_code);
-      formData.append('avatar', {
-        uri: singleFile.uri,
-        name: singleFile.name,
-        type: 'image/jpeg',
-      });
-
+      {singleFile &&(
+        formData.append('avatar', {
+          uri: singleFile.uri,
+          name: singleFile.name,
+          type: 'image/jpeg',
+        })
+  
+      )}
+      
       const res = await axios.post(Base_url.generateUserUpdate, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
