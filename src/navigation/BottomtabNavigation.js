@@ -70,7 +70,7 @@ const BottomtabNavigation = () => {
           }}
         />
       )}
-
+    {roles !== '1' && (
       <Tab.Screen
         name="Bookingform"
         component={BookingForm}
@@ -79,7 +79,9 @@ const BottomtabNavigation = () => {
           tabBarIcon: () => <Icons name="form" color="#25435F" size={30} />,
         }}
       />
-      <Tab.Screen
+    )}
+      {roles !== '1' && (
+        <Tab.Screen
         name="MyBooking"
         component={MyBooking}
         options={{
@@ -89,6 +91,8 @@ const BottomtabNavigation = () => {
           ),
         }}
       />
+      )}
+      
     </Tab.Navigator>
   );
 };
