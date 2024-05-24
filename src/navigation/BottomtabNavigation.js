@@ -47,7 +47,7 @@ const BottomtabNavigation = () => {
           elevation: 0,
           paddingTop: 10,
           paddingBottom: 10,
-          height: 80,
+          height: 65,
         },
       })}>
       <Tab.Screen

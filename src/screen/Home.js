@@ -23,13 +23,16 @@ const Home = () => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
   const [refreshing, setRefreshing] = React.useState(false);
+
   // Refresh Page
-  const onRefresh = React.useCallback(() => {
+ const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
+    dispatch(getUserdata()).then(() => {
       setRefreshing(false);
-    }, 2000);
-  }, []);
+    }).catch(() => {
+      setRefreshing(false);
+    });
+  }, [dispatch]);
 
 
   useEffect(() => {

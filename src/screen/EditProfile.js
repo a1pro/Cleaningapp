@@ -19,7 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getUserdata} from '../redux/UserdataSlice';
 import styles from '../styles/Styles';
 import axios from 'axios';
-import {Base_url, base_url} from '../Apiurl';
+import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Popup from '../component/Popup';
 

@@ -61,6 +61,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#25435F',
     marginBottom: 15,
   },
+  disabledBtn:{
+opacity:0.2
+  },
   btntext: {
     color: '#25435F',
     fontSize: 22,
