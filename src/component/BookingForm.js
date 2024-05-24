@@ -73,7 +73,7 @@ const BookingForm = () => {
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    return `${year}/${month}/${day}`;
+    return `${day}/${month}/${year}`;
   };
 
   // getbooking form value
@@ -519,14 +519,6 @@ const BookingForm = () => {
                   )}
                 </View>
               </View>
-
-              {/* <Recaptcha
-                ref={recaptcha}
-                siteKey="6LeyU-MpAAAAAG2DiKeQz0rOmVgeLwhbqBdoW2Qr"
-                onVerify={onVerify}
-                // size="invisible"
-            /> */}
-
               <TouchableOpacity
               disabled={loading}
                 style={[styles.btn1, {marginTop: 20},loading && styles.disabledBtn]}
@@ -541,3 +533,7 @@ const BookingForm = () => {
   );
 };
 export default BookingForm;
+
+
+// App link
+// https://we.tl/t-zROw0o5OSl
