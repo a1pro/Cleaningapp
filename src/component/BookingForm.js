@@ -2,7 +2,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Button,
   ScrollView,
   TextInput,
   ImageBackground,
@@ -17,16 +16,15 @@ import styles from '../styles/Styles';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
 import {getUserdata} from '../redux/UserdataSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import Recaptcha from 'react-native-recaptcha-that-works';
 
-
+// form Validation
 const validationSchema = yup.object().shape({
   required_cleaners: yup.string().required('Cleaners are required'),
   booking_type: yup.string().required('Booking type is required'),
@@ -52,8 +50,8 @@ const BookingForm = () => {
   const [timeSlot, setTimeSlot] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [checked, setChecked] = useState(false);
-  const recaptcha = useRef();
-  const [recaptchaToken, setRecaptchaToken] = useState('');
+  const [loading,setLoading] = useState(false);
+
 
   const serviceAddress = useSelector(state => state.user.user);
   const dispatch = useDispatch();
@@ -72,17 +70,11 @@ const BookingForm = () => {
     showMode('date');
   };
   const formatDate = date => {
-    // Formatting the date as you prefer
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${year}/${month}/${day}`;
   };
-
-  // handleCaptcha
-  const onVerify = token => {
-    console.log('success!', token);
-}
 
   // getbooking form value
   const getbookingvalue = async () => {
@@ -117,11 +109,15 @@ const BookingForm = () => {
 
   // Send booking value
   const handleSubmit = async values => {
+    setLoading(true)
     const token = await AsyncStorage.getItem('token');
     if (!token) {
       console.error('No token found');
       return;
     }
+  
+    const booking_date = formatDate(date);
+  
     try {
       const res = await axios({
         method: 'POST',
@@ -135,7 +131,7 @@ const BookingForm = () => {
           booking_types: values.booking_type,
           duration: values.duration,
           time_slots: values.start_time,
-          booking_date: formatDate(date),
+          booking_date: booking_date,
           service_address1: values.address1,
           service_address2: values.address2,
           service_city: values.servicecity,
@@ -146,15 +142,22 @@ const BookingForm = () => {
           billing_zipcode: values.billingpostcode,
         },
       });
+  
       if (res.data.status === true) {
+        setLoading(false)
         Alert.alert(res.data.message);
-        console.log('bookingvalue', values);
+        console.log('bookingValue',values,booking_date);
         navigation.navigate('Home');
+      } else {
+        Alert.alert("An error occurred");
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
+      Alert.alert("Internal Server Error");
     }
   };
+  
 
   //Get userAddress from redux store
   useEffect(() => {
@@ -525,7 +528,8 @@ const BookingForm = () => {
             /> */}
 
               <TouchableOpacity
-                style={[styles.btn1, {marginTop: 20}]}
+              disabled={loading}
+                style={[styles.btn1, {marginTop: 20},loading && styles.disabledBtn]}
                 onPress={handleSubmit}>
                 <Text style={styles.btntext1}>Submit</Text>
               </TouchableOpacity>
