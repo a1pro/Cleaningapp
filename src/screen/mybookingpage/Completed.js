@@ -9,7 +9,7 @@ const RenderBooking = ({item}) => {
   const bookingDate = moment(item.booking_date).format('DD MMM YYYY')
   return (
     <>
-      {item.cleaning_status === 'Completed' && (
+      {item?.cleaning_status === 'Completed' && (
        <View style={{marginTop: 30}}>
        <View style={styles.booking_heading}>
          <View
