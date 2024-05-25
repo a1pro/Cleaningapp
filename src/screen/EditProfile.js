@@ -23,22 +23,44 @@ import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Popup from '../component/Popup';
 
+
+// profile validation
 const validationSchema = yup.object().shape({
-  fname: yup.string().required('First name is required'),
-  lname: yup.string().required('Last name is required'),
-  company_name: yup.string().required('Company name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  phone_no: yup.string().required('Contact number is required'),
-  address: yup.string().required('Address is required'),
-  address2: yup.string().required('Address2 is required'),
-  city: yup.string().required('City is required'),
-  zip_code: yup.string().required('Zip code is required'),
+   fname: yup.string().required('First name is required')
+   .max(10)
+   .min(3)
+   .matches(/^[A-Za-z]*$/, 'Please enter a valid name without spaces'),
+  //  .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
+   lname: yup.string().required('Last name is required')
+   .max(20,'Too Long!')
+   .min(3,'Too Short!')
+   .matches(/^[A-Za-z]*$/, 'Please enter a valid name without spaces'),
+   company_name: yup.string().required('Company name is required')
+   .max(20,'Too Long!')
+   .min(3,'Too Short!'),
+   email: yup.string().email('Invalid email').required('Email is required'),
+   phone_no: yup.string().required('Contact number is required')
+   .matches(/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,'Invalid contact number')
+   .max(10,"Too Long")
+   .min(10,"Phone no must be 10 characters"),
+   address: yup.string().required('Address is required')
+   .min(5,"Too Short")
+   .max(50,"Too Long"),
+   address2: yup.string().required('Address2 is required')
+   .min(5,"Too Short")
+   .max(50,"Too Long"),
+   city: yup.string().required('City is required'),
+   zip_code: yup.string().required('Zip code is required')
+  .matches(/^[0-9]+$/, "Must be only digits")
+  .min(5, 'Must be exactly 5 digits')
+  .max(5, 'Must be exactly 5 digits')
 });
 
 const EditProfile = () => {
   const [singleFile, setSingleFile] = useState(null);
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
+  const [loading,setLoading] = useState(false);
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
 
@@ -66,6 +88,7 @@ const EditProfile = () => {
 
   //Edit profile data api
   const handleSubmit = async values => {
+    setLoading(true);
     const token = await AsyncStorage.getItem('token');
     if (!token) {
       console.error('No token found');
@@ -99,14 +122,15 @@ const EditProfile = () => {
           Authorization: 'Bearer ' + token,
         },
       });
-
       if (res.data.success === true) {
+        setLoading(false);
         Alert.alert(res.data.message);
         navigation.navigate('Home');
       } else {
         Alert.alert('Error', res.data.message);
       }
     } catch (error) {
+      setLoading(false);
       console.error(error);
       Alert.alert('Error', 'An error occurred while updating the profile.');
     }
@@ -235,6 +259,7 @@ const EditProfile = () => {
                   placeholder="Enter contact number"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
+                  keyboardType='numeric'
                   value={values.phone_no}
                   onChangeText={handleChange('phone_no')}
                   onBlur={handleBlur('phone_no')}
@@ -291,6 +316,7 @@ const EditProfile = () => {
                 <TextInput
                   placeholder="Enter zipcode"
                   placeholderTextColor="#000"
+                  keyboardType='numeric'
                   style={styles.inputfield}
                   value={values.zip_code}
                   onChangeText={handleChange('zip_code')}
@@ -301,7 +327,8 @@ const EditProfile = () => {
                 )}
               </View>
               <TouchableOpacity
-                style={[styles.btn1, {marginTop: 20}]}
+                disabled={loading}
+                style={[styles.btn1, {marginTop: 20},loading && styles.disabledBtn]}
                 onPress={handleSubmit}>
                 <Text style={styles.btntext1}>Save</Text>
               </TouchableOpacity>
