@@ -72,7 +72,7 @@ const CheckStatusPopup = ({
                     <MaterialIcons name="access-time" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>{cleanerDataById.duration}</Text>
+                    <Text style={[styles.text,{textAlign:'center'}]}>{cleanerDataById.duration}</Text>
                     <Text style={styles.text_center}>Est time</Text>
                   </View>
                 </View>
@@ -85,7 +85,7 @@ const CheckStatusPopup = ({
                     <MaterialIcons name="location-on" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>{cleanerDataById.city}</Text>
+                    <Text style={[styles.text,{textAlign:'center'}]}>{cleanerDataById.city}</Text>
                     <Text style={styles.text_center}>Location</Text>
                   </View>
                 </View>
@@ -101,7 +101,7 @@ const CheckStatusPopup = ({
                     <MaterialIcons name="date-range" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>{bookingDate}</Text>
+                    <Text style={[styles.text,{textAlign:'center'}]}>{bookingDate}</Text>
                     <Text style={styles.text_center}>Date</Text>
                   </View>
                 </View>
@@ -114,7 +114,7 @@ const CheckStatusPopup = ({
                     <FontAwesome name="dollar" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={styles.text}>$ {cleanerDataById.total_price_order} Per hour</Text>
+                    <Text style={[styles.text,{textAlign:'center'}]}>$ {cleanerDataById.total_price_order} Per hour</Text>
                     <Text style={styles.text_center}>Price</Text>
                   </View>
                 </View>

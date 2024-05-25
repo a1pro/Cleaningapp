@@ -38,7 +38,7 @@ import moment from 'moment';
           </Text>
         </View>
         <Text style={{color: '#25435F', fontSize: 16, fontWeight: 'bold'}}>
-          {item.booking_id}
+         $ {item.total_price_order}
         </Text>
       </View>
       <View style={styles.whitebox}>
@@ -84,6 +84,7 @@ import moment from 'moment';
 const AllBooking = () => {
   // Get user booking data from redux
   const userbooking = useSelector(state => state.userbookingdata.userbooking.bookingdata);
+  console.log("userbooking",userbooking);
   const loading = useSelector(state => state.userbookingdata.loading);
   const [refreshing, setRefreshing] =useState(false);
 

@@ -27,14 +27,14 @@ import Popup from '../component/Popup';
 // profile validation
 const validationSchema = yup.object().shape({
    fname: yup.string().required('First name is required')
-   .max(10)
+   .max(20)
    .min(3)
-   .matches(/^[A-Za-z]*$/, 'Please enter a valid name without spaces'),
+   .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
   //  .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
    lname: yup.string().required('Last name is required')
    .max(20,'Too Long!')
    .min(3,'Too Short!')
-   .matches(/^[A-Za-z]*$/, 'Please enter a valid name without spaces'),
+   .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
    company_name: yup.string().required('Company name is required')
    .max(20,'Too Long!')
    .min(3,'Too Short!'),
