@@ -13,6 +13,13 @@ const CompletedOrder = () => {
   const completed_data = useSelector(
     state => state.cleanerorder.cleanerOrderdata.completed_data,
   );
+  
+//handleCheckStatus Modal
+const handleCheckStatus = (id, item) => {
+  setStatusId(id);
+  setModalVisible(true);
+  setCleanerDataById(item);
+};
 
   //get cleaner order details
   useEffect(() => {
