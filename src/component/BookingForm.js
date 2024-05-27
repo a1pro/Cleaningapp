@@ -33,11 +33,19 @@ const validationSchema = yup.object().shape({
   address1: yup.string().required('Service address1 is required'),
   address2: yup.string().required('Service address2 is required'),
   servicecity: yup.string().required('Service city is required'),
-  servicepostcode: yup.string().required('Service post code is required'),
+  // servicepostcode: yup.string().required('Service post code is required'),
+  servicepostcode: yup.string().required('Service zip code is required')
+  .matches(/^[0-9]+$/, "Must be only digits")
+  .min(5, 'Must be 5 digits')
+  .max(5, 'Must be 5 digits'),
   billingaddress1: yup.string().required('Billing address1 is required'),
   billingaddress2: yup.string().required('Billing address2 is required'),
   billingcity: yup.string().required('Billing city is required'),
   billingpostcode: yup.string().required('Billing Post code is required'),
+  billingpostcode: yup.string().required('Billing zip code is required')
+  .matches(/^[0-9]+$/, "Must be only digits")
+  .min(5, 'Must be 5 digits')
+  .max(5, 'Must be 5 digits')
 });
 
 const BookingForm = () => {
@@ -403,6 +411,7 @@ const BookingForm = () => {
                   <Text style={styles.text}>Post Code</Text>
                   <TextInput
                     placeholder="postcode"
+                    keyboardType="numeric"
                     placeholderTextColor="#000"
                     style={styles.inputfield}
                     value={values.servicepostcode}
@@ -506,6 +515,7 @@ const BookingForm = () => {
                   <Text style={styles.text}>Post Code</Text>
                   <TextInput
                     placeholder="postcode"
+                    keyboardType="numeric"
                     placeholderTextColor="#000"
                     style={styles.inputfield}
                     value={values.billingpostcode}

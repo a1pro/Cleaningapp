@@ -82,9 +82,10 @@ import moment from 'moment';
 };
 
 const AllBooking = () => {
+  
   // Get user booking data from redux
   const userbooking = useSelector(state => state.userbookingdata.userbooking.bookingdata);
-  console.log("userbooking",userbooking);
+  console.log("userbooking",userbooking.cleaning_status);
   const loading = useSelector(state => state.userbookingdata.loading);
   const [refreshing, setRefreshing] =useState(false);
 

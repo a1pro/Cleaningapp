@@ -74,11 +74,13 @@ const RenderBooking = ({item}) => {
 };
 const InProcess = () => {
   const userbooking = useSelector(state => state.userbookingdata.userbooking.bookingdata);
+  // filter  inprogress data from userbooking
+  const inprogressData = userbooking.filter(booking=>booking.cleaning_status==="In Progress");
   return (
     <View style={[styles.container, {paddingBottom: 20}]}>
       <FlatList
-        data={userbooking}
-        renderItem={RenderBooking}
+        data={inprogressData}
+        renderItem={({ item }) => <RenderBooking item={item} />}
       />
     </View>
   );
