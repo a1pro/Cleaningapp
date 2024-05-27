@@ -74,11 +74,13 @@ const RenderBooking = ({item}) => {
 };
 const Cancelpage = () => {
   const userbooking = useSelector(state => state.userbookingdata.userbooking.bookingdata);
+  // filter cancel data from userbooking
+  const cancelbooking = userbooking.filter(item => item.cleaning_status === 'Cancelled');
   return (
     <View style={[styles.container, {paddingBottom: 20}]}>
       <FlatList
-        data={userbooking}
-        renderItem={RenderBooking}
+        data={cancelbooking}
+        renderItem={({ item }) => <RenderBooking item={item} />}
       />
     </View>
   );

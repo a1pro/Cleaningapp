@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
+  BackHandler,
+  Alert,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import styles from '../styles/Styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MyOrders from '../component/MyOrders';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserdata} from '../redux/UserdataSlice';
@@ -52,6 +54,38 @@ const Home = () => {
   // if (!token) {
   //   navigation.navigate('Login');
   // }
+
+  // Exit function from Home
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+       'Exit App',
+        "Do you want to exit the app",
+        [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: 'cancel',
+          },
+          { text: "Ok", onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false }
+      );
+      return true;
+    };
+  
+    if (isFocused) {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction
+      );
+  
+      return () => backHandler.remove();
+    }
+  }, [isFocused]);
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

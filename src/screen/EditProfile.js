@@ -27,33 +27,33 @@ import Popup from '../component/Popup';
 // profile validation
 const validationSchema = yup.object().shape({
    fname: yup.string().required('First name is required')
-   .max(20)
-   .min(3)
+   .max(20,"First name must be 20 characters")
+   .min(3,"First name must be at least 3 characters")
    .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
   //  .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
    lname: yup.string().required('Last name is required')
-   .max(20,'Too Long!')
-   .min(3,'Too Short!')
+   .max(20,"Last name must be 20 characters")
+   .min(3,"Last name must be at least 3 characters")
    .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
    company_name: yup.string().required('Company name is required')
-   .max(20,'Too Long!')
-   .min(3,'Too Short!'),
+   .max(50,'Company name must be at 50 characters')
+   .min(3,'Company name must be at least 3 characters'),
    email: yup.string().email('Invalid email').required('Email is required'),
    phone_no: yup.string().required('Contact number is required')
    .matches(/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,'Invalid contact number')
-   .max(10,"Too Long")
-   .min(10,"Phone no must be 10 characters"),
+   .max(10,"Contact number must be 10 characters")
+   .min(10,"Contact number must be 10 characters"),
    address: yup.string().required('Address is required')
-   .min(5,"Too Short")
-   .max(50,"Too Long"),
+   .min(5,"Address must be at least 5 characters")
+   .max(50,"Address must be 50 characters"),
    address2: yup.string().required('Address2 is required')
-   .min(5,"Too Short")
-   .max(50,"Too Long"),
+   .min(5,"Address must be at least 5 characters")
+   .max(50,"Address must be 50 characters"),
    city: yup.string().required('City is required'),
    zip_code: yup.string().required('Zip code is required')
   .matches(/^[0-9]+$/, "Must be only digits")
-  .min(5, 'Must be exactly 5 digits')
-  .max(5, 'Must be exactly 5 digits')
+  .min(5, 'Must be 5 digits')
+  .max(5, 'Must be 5 digits')
 });
 
 const EditProfile = () => {
