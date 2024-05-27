@@ -23,44 +23,60 @@ import {Base_url} from '../Apiurl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Popup from '../component/Popup';
 
-
 // profile validation
 const validationSchema = yup.object().shape({
-   fname: yup.string().required('First name is required')
-   .max(20,"First name must be 20 characters")
-   .min(3,"First name must be at least 3 characters")
-   .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
+  fname: yup
+    .string()
+    .required('First name is required')
+    .max(20, 'First name must be 20 characters')
+    .min(3, 'First name must be at least 3 characters')
+    .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
   //  .matches(/^[A-Za-z ]*$/, 'Please enter valid name'),
-   lname: yup.string().required('Last name is required')
-   .max(20,"Last name must be 20 characters")
-   .min(3,"Last name must be at least 3 characters")
-   .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
-   company_name: yup.string().required('Company name is required')
-   .max(50,'Company name must be at 50 characters')
-   .min(3,'Company name must be at least 3 characters'),
-   email: yup.string().email('Invalid email').required('Email is required'),
-   phone_no: yup.string().required('Contact number is required')
-   .matches(/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,'Invalid contact number')
-   .max(10,"Contact number must be 10 characters")
-   .min(10,"Contact number must be 10 characters"),
-   address: yup.string().required('Address is required')
-   .min(5,"Address must be at least 5 characters")
-   .max(50,"Address must be 50 characters"),
-   address2: yup.string().required('Address2 is required')
-   .min(5,"Address must be at least 5 characters")
-   .max(50,"Address must be 50 characters"),
-   city: yup.string().required('City is required'),
-   zip_code: yup.string().required('Zip code is required')
-  .matches(/^[0-9]+$/, "Must be only digits")
-  .min(5, 'Must be 5 digits')
-  .max(5, 'Must be 5 digits')
+  lname: yup
+    .string()
+    .required('Last name is required')
+    .max(20, 'Last name must be 20 characters')
+    .min(3, 'Last name must be at least 3 characters')
+    .matches(/^[A-Za-z]*$/, 'Only alphabets accepted'),
+  company_name: yup
+    .string()
+    .required('Company name is required')
+    .max(50, 'Company name must be at 50 characters')
+    .min(3, 'Company name must be at least 3 characters'),
+  email: yup.string().email('Invalid email').required('Email is required'),
+  phone_no: yup
+    .string()
+    .required('Contact number is required')
+    .matches(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      'Invalid contact number',
+    )
+    .max(10, 'Contact number must be 10 characters')
+    .min(10, 'Contact number must be 10 characters'),
+  address: yup
+    .string()
+    .required('Address is required')
+    .min(5, 'Address must be at least 5 characters')
+    .max(50, 'Address must be 50 characters'),
+  address2: yup
+    .string()
+    .required('Address2 is required')
+    .min(5, 'Address must be at least 5 characters')
+    .max(50, 'Address must be 50 characters'),
+  city: yup.string().required('City is required'),
+  zip_code: yup
+    .string()
+    .required('Zip code is required')
+    .matches(/^[0-9]+$/, 'Must be only digits')
+    .min(5, 'Must be 5 digits')
+    .max(5, 'Must be 5 digits'),
 });
 
 const EditProfile = () => {
   const [singleFile, setSingleFile] = useState(null);
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
 
@@ -107,15 +123,15 @@ const EditProfile = () => {
       formData.append('address2', values.address2);
       formData.append('city', values.city);
       formData.append('zipcode', values.zip_code);
-      {singleFile &&(
-        formData.append('avatar', {
-          uri: singleFile.uri,
-          name: singleFile.name,
-          type: 'image/jpeg',
-        })
-  
-      )}
-      
+      {
+        singleFile &&
+          formData.append('avatar', {
+            uri: singleFile.uri,
+            name: singleFile.name,
+            type: 'image/jpeg',
+          });
+      }
+
       const res = await axios.post(Base_url.generateUserUpdate, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -155,23 +171,25 @@ const EditProfile = () => {
       </View>
       <View style={styles.container}>
         {/* Profile picture */}
-        <View style={{alignItems: 'center', marginTop: -40}}>
-          {singleFile ? (
-            <Image
-              source={{uri: singleFile.uri}}
-              style={{width: 130, height: 130, borderRadius: 100}}
-            />
-          ) : (
-            // <Image source={require('../assets/user-dummy.png')} style={{width:130,height:130,borderRadius:100}}/>
-            <Image
-              source={{uri:user.avatar}}
-              style={{width: 130, height: 130, borderRadius: 100}}
-            />
-          )}
-          <TouchableOpacity onPress={selectOneFile}>
-            <Text style={styles.text}>Edit Picture</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={selectOneFile}>
+          <View style={{alignItems: 'center', marginTop: -40}}>
+            {singleFile ? (
+              <Image
+                source={{uri: singleFile.uri}}
+                style={{width: 130, height: 130, borderRadius: 100}}
+              />
+            ) : (
+              // <Image source={require('../assets/user-dummy.png')} style={{width:130,height:130,borderRadius:100}}/>
+              <Image
+                source={{uri: user.avatar}}
+                style={{width: 130, height: 130, borderRadius: 100}}
+              />
+            )}
+            <TouchableOpacity onPress={selectOneFile}>
+              <Text style={styles.text}>Edit Picture</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
 
         <Formik
           enableReinitialize
@@ -259,7 +277,7 @@ const EditProfile = () => {
                   placeholder="Enter contact number"
                   placeholderTextColor="#000"
                   style={styles.inputfield}
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                   value={values.phone_no}
                   onChangeText={handleChange('phone_no')}
                   onBlur={handleBlur('phone_no')}
@@ -316,7 +334,7 @@ const EditProfile = () => {
                 <TextInput
                   placeholder="Enter zipcode"
                   placeholderTextColor="#000"
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                   style={styles.inputfield}
                   value={values.zip_code}
                   onChangeText={handleChange('zip_code')}
@@ -328,7 +346,11 @@ const EditProfile = () => {
               </View>
               <TouchableOpacity
                 disabled={loading}
-                style={[styles.btn1, {marginTop: 20},loading && styles.disabledBtn]}
+                style={[
+                  styles.btn1,
+                  {marginTop: 20},
+                  loading && styles.disabledBtn,
+                ]}
                 onPress={handleSubmit}>
                 <Text style={styles.btntext1}>Save</Text>
               </TouchableOpacity>
@@ -336,7 +358,7 @@ const EditProfile = () => {
           )}
         </Formik>
       </View>
-      <Popup showModal={showModal} setShowModal={setShowModal} />
+      <Popup showModal={showModal} setShowModal={setShowModal}/>
     </ScrollView>
   );
 };
