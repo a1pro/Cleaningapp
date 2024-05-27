@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 const BottomtabNavigation = () => {
   const [roles, setRoles] = useState(null);
 
-  //Cehck Role and show screen accroding role
+  // Check Role and show screen according role
   useEffect(() => {
     const checkRoles = async () => {
       try {
@@ -35,9 +35,9 @@ const BottomtabNavigation = () => {
   return (
     <Tab.Navigator
       tabBarHideOnKeyboard={true}
-      screenOptions={() => ({
-        tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: '#25435F',
+      screenOptions={({route}) => ({
+        tabBarActiveTintColor: '#25435F',
+        tabBarInactiveTintColor: '#898585',
         tabBarLabelStyle: {
           fontSize: 13,
         },
@@ -49,13 +49,28 @@ const BottomtabNavigation = () => {
           paddingBottom: 10,
           height: 65,
         },
+        tabBarIcon: ({focused, color}) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+            return <Icon name={iconName} size={30} color={color} />;
+          } else if (route.name === 'MyOrderPage') {
+            iconName = 'shopping-bag';
+            return <MaterialIcons name={iconName} size={30} color={color} />;
+          } else if (route.name === 'Bookingform') {
+            iconName = 'form';
+            return <Icons name={iconName} size={30} color={color} />;
+          } else if (route.name === 'MyBooking') {
+            iconName = 'today-sharp';
+            return <Icon name={iconName} size={30} color={color} />;
+          }
+        },
       })}>
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           headerShown: false,
-          tabBarIcon: () => <Icon name="home" color="#25435F" size={30} />,
         }}
       />
       {roles === '1' && (
@@ -64,35 +79,27 @@ const BottomtabNavigation = () => {
           component={MyOrderPage}
           options={{
             headerShown: false,
-            tabBarIcon: () => (
-              <MaterialIcons name="shopping-bag" color="#25435F" size={30} />
-            ),
           }}
         />
       )}
-    {roles !== '1' && (
-      <Tab.Screen
-        name="Bookingform"
-        component={BookingForm}
-        options={{
-          headerShown: false,
-          tabBarIcon: () => <Icons name="form" color="#25435F" size={30} />,
-        }}
-      />
-    )}
       {roles !== '1' && (
         <Tab.Screen
-        name="MyBooking"
-        component={MyBooking}
-        options={{
-          headerShown: false,
-          tabBarIcon: () => (
-            <Icon name="today-sharp" color="#25435F" size={30} />
-          ),
-        }}
-      />
+          name="Bookingform"
+          component={BookingForm}
+          options={{
+            headerShown: false,
+          }}
+        />
       )}
-      
+      {roles !== '1' && (
+        <Tab.Screen
+          name="MyBooking"
+          component={MyBooking}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 };
