@@ -9,9 +9,13 @@ const CheckStatusPopup = ({
   modalVisible,
   setModalVisible,
   statusId,
+  status,
   cleanerDataById,
 }) => {
-  const bookingDate = moment(cleanerDataById.booking_date).format(' Do MMM YYYY');
+  const bookingDate = moment(cleanerDataById.booking_date).format(
+    ' Do MMM YYYY',
+  );
+
   return (
     <View>
       <Modal
@@ -53,7 +57,7 @@ const CheckStatusPopup = ({
                   />
                 )}
                 <Text style={[styles.text, {paddingLeft: 8, marginTop: 0}]}>
-                 {cleanerDataById.user_name}
+                  {cleanerDataById.user_name}
                 </Text>
               </View>
             </View>
@@ -72,7 +76,9 @@ const CheckStatusPopup = ({
                     <MaterialIcons name="access-time" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={[styles.text,{textAlign:'center'}]}>{cleanerDataById.duration}</Text>
+                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                      {cleanerDataById.duration}
+                    </Text>
                     <Text style={styles.text_center}>Est time</Text>
                   </View>
                 </View>
@@ -85,7 +91,9 @@ const CheckStatusPopup = ({
                     <MaterialIcons name="location-on" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={[styles.text,{textAlign:'center'}]}>{cleanerDataById.city}</Text>
+                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                      {cleanerDataById.city}
+                    </Text>
                     <Text style={styles.text_center}>Location</Text>
                   </View>
                 </View>
@@ -101,7 +109,9 @@ const CheckStatusPopup = ({
                     <MaterialIcons name="date-range" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={[styles.text,{textAlign:'center'}]}>{bookingDate}</Text>
+                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                      {bookingDate}
+                    </Text>
                     <Text style={styles.text_center}>Date</Text>
                   </View>
                 </View>
@@ -114,51 +124,55 @@ const CheckStatusPopup = ({
                     <FontAwesome name="dollar" size={30} color="#000" />
                   </View>
                   <View>
-                    <Text style={[styles.text,{textAlign:'center'}]}>$ {cleanerDataById.total_price_order} Per hour</Text>
+                    <Text style={[styles.text, {textAlign: 'center'}]}>
+                      $ {cleanerDataById.total_price_order} Per hour
+                    </Text>
                     <Text style={styles.text_center}>Price</Text>
                   </View>
                 </View>
               </View>
               {/* Cancel and Confirm Order button */}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 20,
-                }}>
-                <View style={{flex: 1}}>
-                  <TouchableOpacity
-                    style={[
-                      styles.btn2,
-                      {
-                        backgroundColor: '#F4CECE',
-                        paddingLeft: 5,
-                        paddingRight: 5,
-                        marginTop: 0,
-                      },
-                    ]}>
-                    <Text
+              {cleanerDataById.cleaning_status!== 2 && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 20,
+                  }}>
+                  <View style={{flex: 1}}>
+                    <TouchableOpacity
                       style={[
-                        styles.btntext2,
-                        {color: '#FE0D0D', fontSize: 16},
+                        styles.btn2,
+                        {
+                          backgroundColor: '#F4CECE',
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          marginTop: 0,
+                        },
                       ]}>
-                      Cancel order
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                      <Text
+                        style={[
+                          styles.btntext2,
+                          {color: '#FE0D0D', fontSize: 16},
+                        ]}>
+                        Cancel order
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
-                <View style={{flex: 1, marginLeft: 10}}>
-                  <TouchableOpacity
-                    style={[
-                      styles.btn1,
-                      {paddingLeft: 5, paddingRight: 5, marginBottom: 0},
-                    ]}>
-                    <Text style={[styles.btntext1, {fontSize: 16}]}>
-                      Confirm order
-                    </Text>
-                  </TouchableOpacity>
+                  <View style={{flex: 1, marginLeft: 10}}>
+                    <TouchableOpacity
+                      style={[
+                        styles.btn1,
+                        {paddingLeft: 5, paddingRight: 5, marginBottom: 0},
+                      ]}>
+                      <Text style={[styles.btntext1, {fontSize: 16}]}>
+                        Confirm order
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
+                )}
             </View>
           </View>
         </View>

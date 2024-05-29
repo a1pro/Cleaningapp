@@ -1,7 +1,6 @@
-import React, {useDebugValue, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Image,
   Text,
@@ -10,15 +9,12 @@ import {
 } from 'react-native';
 import styles from '../styles/Styles';
 import CheckStatusPopup from '../component/CheckStatusPopup';
-import axios from 'axios';
-import {Base_url} from '../Apiurl';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getcleanerorder } from '../redux/CleanerOrderSlice';
 
 const OngoingOrder = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [cleanerBooking, setCleanerBooking] = useState([]);
+  // const [cleanerBooking, setCleanerBooking] = useState([]);
   const [statusId, setStatusId] = useState('');
   const [cleanerDataById, setCleanerDataById] = useState({});
   const [loading, setLoading] = useState(false);

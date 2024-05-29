@@ -33,7 +33,6 @@ const validationSchema = yup.object().shape({
   address1: yup.string().required('Service address1 is required'),
   address2: yup.string().required('Service address2 is required'),
   servicecity: yup.string().required('Service city is required'),
-  // servicepostcode: yup.string().required('Service post code is required'),
   servicepostcode: yup.string().required('Service zip code is required')
   .matches(/^[0-9]+$/, "Must be only digits")
   .min(5, 'Must be 5 digits')
@@ -154,7 +153,6 @@ const BookingForm = () => {
       if (res.data.status === true) {
         setLoading(false)
         Alert.alert(res.data.message);
-        console.log('bookingValue',values,booking_date);
         navigation.navigate('Home');
       } else {
         Alert.alert("An error occurred");
@@ -543,7 +541,3 @@ const BookingForm = () => {
   );
 };
 export default BookingForm;
-
-
-// App link
-// https://we.tl/t-zROw0o5OSl

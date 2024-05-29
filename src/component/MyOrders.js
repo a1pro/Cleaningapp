@@ -59,12 +59,17 @@ const MyOrders = () => {
           <Text style={styles.h6}>My Orders</Text>
           <View style={styles.orders_wrapper}>
             <View style={styles.ordersbox}>
+            <TouchableOpacity onPress={()=> navigation.navigate('MyOrderPage')}>
               <Text style={styles.h3}>{ongoing_data?.length}</Text>
               <Text style={styles.h6}>Ongoing</Text>
+            </TouchableOpacity>
             </View>
+            {/* Completed order */}
             <View style={styles.ordersbox}>
+            <TouchableOpacity onPress={()=> navigation.navigate('MyOrderPage')}>
               <Text style={styles.h3}>{completed?.length}</Text>
               <Text style={styles.h6}>Completed</Text>
+            </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -73,12 +78,16 @@ const MyOrders = () => {
           <Text style={styles.h6}>My Orders</Text>
           <View style={styles.orders_wrapper}>
             <View style={styles.ordersbox}>
+              <TouchableOpacity onPress={()=>navigation.navigate('MyBooking')}>
               <Text style={styles.h3}>{userOngoing_data}</Text>
               <Text style={styles.h6}>Ongoing</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.ordersbox}>
+              <TouchableOpacity onPress={()=>navigation.navigate('MyBooking')}>
               <Text style={styles.h3}>{userCompleted_data}</Text>
               <Text style={styles.h6}>Completed</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

@@ -1,11 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import DrawerNavigation from './DrawerNavigation';
 import Login from '../screen/Login';
 import BottomtabNavigation from './BottomtabNavigation';
 import SplashScreen from '../screen/SplashScreen';
 import LoginOption from '../screen/LoginOption';
 import EditProfile from '../screen/EditProfile';
+// import CompletedOrder from '../cleaner/CompletedOrder';
 // import MyOrderPage from '../cleaner/MyOrderPage';
 
 const Stack = createStackNavigator();
@@ -34,8 +34,8 @@ const StackNavigation = () => {
         options={{headerShown: false}}
       />
       {/* <Stack.Screen
-        name="CarNumberPlate"
-        component={DrawerNavigation}
+        name="CleanerCompletedOrder"
+        component={CompletedOrder}
         options={{headerShown: false}}
       /> */}
       <Stack.Screen name="Home" component={BottomtabNavigation} options={{headerShown:false}}/>

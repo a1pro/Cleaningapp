@@ -27,6 +27,7 @@ const handleCheckStatus = (id, item) => {
   }, [dispatch]);
 
   const renderCompletedData = ({item}) => {
+
     return (
       <View style={[styles.container, {paddingBottom: 20}]}>
         <View style={[styles.whitebox, {padding: 10, marginTop: 20}]}>

@@ -43,7 +43,8 @@ const validationSchema = yup.object().shape({
     .required('Company name is required')
     .max(50, 'Company name must be at 50 characters')
     .min(3, 'Company name must be at least 3 characters'),
-  email: yup.string().email('Invalid email').required('Email is required'),
+  email: yup.string().email('Invalid email').required('Email is required')
+  .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid email'),
   phone_no: yup
     .string()
     .required('Contact number is required')
@@ -166,7 +167,7 @@ const EditProfile = () => {
           <Text style={[styles.h3, {marginLeft: 20}]}>Edit Profile</Text>
         </View>
         <TouchableOpacity onPress={() => setShowModal(true)}>
-          <MaterialCommunityIcons name="dots-vertical" size={25} color="#000" />
+          <MaterialIcons name="logout" size={30} color="#000" />
         </TouchableOpacity>
       </View>
       <View style={styles.container}>

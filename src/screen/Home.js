@@ -19,7 +19,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserdata} from '../redux/UserdataSlice';
 
-
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -35,7 +34,6 @@ const Home = () => {
       setRefreshing(false);
     });
   }, [dispatch]);
-
 
   useEffect(() => {
     dispatch(getUserdata());
@@ -84,7 +82,7 @@ const Home = () => {
   
       return () => backHandler.remove();
     }
-  }, [isFocused]);
+  },[isFocused]);
   
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer} refreshControl={
@@ -93,7 +91,8 @@ const Home = () => {
       <ImageBackground
         source={require('../assets/circle1.png')}
         resizeMode="cover"
-        style={{width: '85%', height: 200, marginTop: 1}}></ImageBackground>
+        style={{width: '85%', height: 200, marginTop: 1}}>
+      </ImageBackground>
 
       <View style={style.profile_wrapper}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -117,8 +116,8 @@ const Home = () => {
             <Text style={styles.text}>Find Helper</Text>
           </TouchableOpacity>
         </View>
-      
         <View>
+        {/* MyOrders Component */}
           <MyOrders />
         </View>
       </View>
@@ -127,7 +126,7 @@ const Home = () => {
 };
 
 const style = StyleSheet.create({
-  profile_wrapper: {
+    profile_wrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
