@@ -64,7 +64,6 @@ const CheckStatusPopup = ({
             {/* Details section */}
             <View style={{paddingTop: 30}}>
               <Text style={styles.h6}>Details</Text>
-
               <View
                 style={{
                   flexDirection: 'row',
@@ -98,6 +97,7 @@ const CheckStatusPopup = ({
                   </View>
                 </View>
               </View>
+              
               <View
                 style={{
                   flexDirection: 'row',
@@ -131,6 +131,12 @@ const CheckStatusPopup = ({
                   </View>
                 </View>
               </View>
+              {/* check order status completed then show green check */}
+              {cleanerDataById.cleaning_status=== 2 &&(
+                  <View style={{position:'absolute',top:210,left:'43%'}}>
+                    <MaterialIcons name="check-circle" size={50} color="green"/>
+                  </View>
+                )}
               {/* Cancel and Confirm Order button */}
               {cleanerDataById.cleaning_status!== 2 && (
                 <View
