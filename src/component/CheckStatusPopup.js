@@ -9,12 +9,9 @@ const CheckStatusPopup = ({
   modalVisible,
   setModalVisible,
   statusId,
-  status,
   cleanerDataById,
 }) => {
-  const bookingDate = moment(cleanerDataById.booking_date).format(
-    ' Do MMM YYYY',
-  );
+  const bookingDate = moment(cleanerDataById.booking_date).format(' Do MMM YYYY');
 
   return (
     <View>
