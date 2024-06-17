@@ -22,8 +22,7 @@ const getcleanerorder = createAsyncThunk("getclenerorder",async()=>{
     } catch (error) {
         console.log(error);
     }
-})
-
+});
 
 const CleanerOrderSlice = createSlice({
     name: "CleanerOrder",
